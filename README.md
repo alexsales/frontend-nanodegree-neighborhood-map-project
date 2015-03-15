@@ -5,14 +5,6 @@ Summary:
 An app to help you look for cool things to do, locally.
 
 Tools / Techniques:
--
--
--
--
--
--
--
--
 
 ===============================
 
