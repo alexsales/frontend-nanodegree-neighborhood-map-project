@@ -1,0 +1,26 @@
+{
+	"name": "neighborhood-map-project",
+	"verion": "1.0.0",
+	"devDependencies": {
+
+	},
+	"description": "looking for cool things to do, locally",
+	"main": "app.js",
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"keywords": [
+		"Google Maps API",
+		"Knockout.js framework",
+		"AJAX",
+		"Yelp API",
+		"Wikipedia API",
+		"Flikr API"
+	],
+	"author": "Alex Sales",
+	"bugs": {
+		"url": ""
+	},
+	"homepage": ""
+}
