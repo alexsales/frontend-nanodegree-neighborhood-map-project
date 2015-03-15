@@ -4,7 +4,7 @@
 	"devDependencies": {
 
 	},
-	"description": "looking for cool things to do, locally",
+	"description": "An app to help you look for cool things to do, locally.",
 	"main": "app.js",
 	"repository": {
 		"type": "git",
