@@ -11,6 +11,14 @@ module.exports = function(grunt) {
 				dest: 'src/js/_bower.js',
 				cssDest: 'src/css/_bower.css'
 			}
+		},
+		watch: {
+			all: {
+				files: ['./*.html', './src/**/*.css', './src/**/*.js'],
+				options: {
+					livereload: true
+				}
+			}
 		}
 	});
 
@@ -20,5 +28,5 @@ module.exports = function(grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['wiredep', 'bower_concat']);
+	grunt.registerTask('default', ['wiredep', 'bower_concat', 'watch']);
 };
