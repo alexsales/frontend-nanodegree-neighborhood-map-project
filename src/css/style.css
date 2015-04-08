@@ -1,5 +1,30 @@
+/*-- Global Selectors --*/
 * {
 	box-sizing: border-box;
+}
+
+::-webkit-input-placeholder { /* WebKit browsers */
+	color: #CCC;
+	opacity: .75;
+	font-style: italic;
+	padding-left: 1px;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	color: #CCC;
+	opacity: .75;
+	font-style: italic;
+	padding-left: 1px;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+	color: #CCC;
+	opacity: .75;
+	font-style: italic;
+	padding-left: 1px;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+	color: #CCC;
+	font-style: italic;
+	padding-left: 1px;
 }
 
 html, body, #map-canvas {
@@ -7,4 +32,38 @@ html, body, #map-canvas {
 	margin: 0;
 	height: 100%;
 
+}
+
+input[type="checkbox"] {
+	margin-right: 2px;
+}
+
+input:focus {
+	outline: none;
+	background: #FFC;
+}
+
+label {
+	margin-right: 7px;
+	margin-bottom: 0;
+}
+
+
+/*-- Class Selectors --*/
+
+
+/*-- ID Selectors --*/
+#city-input-form {
+	width: 33%;
+	position: absolute;
+	top: 8%;
+	left: 5%;
+	z-index: 99;
+}
+
+#city-input-form > input {
+	width: 100%;
+	color: #366;
+	padding-left: 5px;
+	margin-bottom: 3px;
 }
