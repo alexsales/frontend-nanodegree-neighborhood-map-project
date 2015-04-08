@@ -21,6 +21,9 @@ var MapViewModel = function() {
 	self.lng = ko.observable();
 	self.mapObj = ko.observable();
 	self.mapDrawn = ko.observable();
+	self.mapCenter = ko.observable();
+    self.mapOptions = ko.observable({});
+    self.map = ko.observable({});
 
 	//-- BEHAVIOR --//
 	// geocodes address and renders map of user's inputted city
@@ -28,48 +31,62 @@ var MapViewModel = function() {
 		console.log('new city');
 		console.log(self.city());
 
-		var addressToArray = self.city().split(' ')
-		var addressToString = addressToArray.join('+');
-		var serverBasedAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + addressToString + '&key=AIzaSyB4mgEnfU7A2ngaDKEJBbsIs7qLxT7ULCg';
+		self.addressToArray = ko.observable(self.city().split(' '));
+		self.addressToString = ko.observable(self.addressToArray().join('+'));
+		self.serverBasedAPI = ko.observable('https://maps.googleapis.com/maps/api/geocode/json?address=' + self.addressToString() + '&key=AIzaSyB4mgEnfU7A2ngaDKEJBbsIs7qLxT7ULCg');
 
-		var userEnteredLat = 0;
-		var userEnteredLng = 0;
-	    var userCenter = {};
-	    var mapOptions = {};
-	    var map = {};
+		self.userEnteredLat = ko.observable();
+		self.userEnteredLng = ko.observable();
 
-		$.getJSON(serverBasedAPI, function(data) {
+		$.getJSON(self.serverBasedAPI(), function(data) {
 		    if (data.status == 'ZERO_RESULTS') {
 		    	//console.log('Enter a valid address');
 		    	self.initialize();
 		    } else {
 				console.log(data);
 
-	    		userEnteredLat = data.results[0].geometry.location.lat;
-	    		userEnteredLng = data.results[0].geometry.location.lng;
-			    userCenter = new google.maps.LatLng(userEnteredLat, userEnteredLng);
-			    mapOptions = {
-					center: userCenter,
+	    		self.userEnteredLat(data.results[0].geometry.location.lat);
+	    		self.userEnteredLng(data.results[0].geometry.location.lng);
+
+			    self.mapCenter(new google.maps.LatLng(self.userEnteredLat(), self.userEnteredLng()));
+			    self.mapOptions({
+					center: self.mapCenter(),
 					zoom: 13,
 					zoomControl: false,
 					mapTypeControl: false,
 					streetViewControl: false
-			    };
-			    map = new google.maps.Map(document.getElementById('map-canvas'),
-			        mapOptions);
-			    // var userMarker = new google.maps.Marker({
-			    // 	position: userCenter2,
-			    // 	map: map2,
-			    // 	title: 'You are here!'
-			    // });
-
-			    // renderMarkers(userCenter2, map2);
-	    		// // console.log('userEnteredLoc ' + userEnteredLoc);
+			    });
+			    self.map(new google.maps.Map(document.getElementById('map-canvas'),
+			        self.mapOptions()));
 		    }
     	}).fail(function() {
     		console.log('Check your internet connection');
     	});
 	};
+
+	self.drawUserMarker = ko.computed(function() {
+		self.userMarker = ko.observable();
+		self.infoWindow = ko.observable();
+
+		if (Object.keys(self.map()).length != 0) {
+			console.log('rendering user position');
+			console.log(self.mapCenter());
+			console.log(self.map());
+
+		    self.userMarker(new google.maps.Marker({
+		    	position: self.mapCenter(),
+		    	map: self.map(),
+		    	title: 'You are here!'
+		    }));
+
+		    self.infoWindow(new google.maps.InfoWindow());
+
+		    google.maps.event.addListener(self.userMarker(), 'click', function() {
+				self.infoWindow().setContent('You are here');
+				self.infoWindow().open(self.map(), this);
+			});
+		}
+	});
 
 	// initializes knockout properties, renders map
 	self.initialize = ko.computed(function () {
@@ -80,6 +97,16 @@ var MapViewModel = function() {
 	    		self.lng(pos.coords.longitude);
 	    		self.mapObj(new Map(self.lat(), self.lng()));
 	    		self.mapDrawn(new google.maps.Map(document.getElementById('map-canvas'), self.mapObj().mapOptions()));
+	    		self.mapCenter(new google.maps.LatLng(self.lat(), self.lng()));
+	    		self.mapOptions({
+					center: self.mapCenter(),
+					zoom: 13,
+					zoomControl: false,
+					mapTypeControl: false,
+					streetViewControl: false
+			    });
+			    self.map(new google.maps.Map(document.getElementById('map-canvas'),
+			        self.mapOptions()));
 	    	};
 
 	        navigator.geolocation.getCurrentPosition(success);
