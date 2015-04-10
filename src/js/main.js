@@ -24,6 +24,8 @@ var MapViewModel = function() {
 	self.mapCenter = ko.observable();
     self.mapOptions = ko.observable({});
     self.map = ko.observable({});
+	self.markersArray = ko.observableArray();
+	self.markerNamesArray = ko.observableArray();    
 
 	//-- BEHAVIOR --//
 	// geocodes address and renders map of user's inputted city
@@ -39,9 +41,11 @@ var MapViewModel = function() {
 		self.userEnteredLng = ko.observable();
 
 		$.getJSON(self.serverBasedAPI(), function(data) {
-		    if (data.status == 'ZERO_RESULTS') {
-		    	//console.log('Enter a valid address');
-		    	self.initialize();
+			console.log(data);
+			console.log(data.status);
+		    if (data.status == 'ZERO_RESULTS' || self.city() == '') {
+		    	alert('Enter a valid address');
+		    	// self.initialize();
 		    } else {
 				console.log(data);
 
@@ -64,10 +68,12 @@ var MapViewModel = function() {
     	});
 	};
 
+	// renders Google Maps marker for city's center (user's position)
 	self.drawUserMarker = ko.computed(function() {
 		self.userMarker = ko.observable();
 		self.infoWindow = ko.observable();
 
+		// check to see make sure map object has loaded before rendering userMarker
 		if (Object.keys(self.map()).length != 0) {
 			console.log('rendering user position');
 			console.log(self.mapCenter());
@@ -88,8 +94,51 @@ var MapViewModel = function() {
 		}
 	});
 
+	// render markers for Google Places that match business types listed in API request,
+	// initially set to ['art_gallery', 'book_store', 'cafe', 'museum']
+	self.drawBusinessMarkers = ko.computed(function() {
+		self.service = ko.observable();
+		self.businessMarkers = ko.observable();
+		self.infoWindow = ko.observable();
+		self.request = ko.observable({});
+
+		// check to see make sure map object has loaded before rendering businessMarkers
+		if (Object.keys(self.map()).length != 0) {
+			console.log('business markers rendering');
+			console.log(self.map());
+
+			self.service(new google.maps.places.PlacesService(self.mapDrawn()));
+			self.request({
+				location: self.mapCenter(),
+				radius: '6200',
+				types: ['art_gallery', 'book_store', 'cafe', 'museum']
+			});
+
+			var createMarker = function(results, status) {
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					for (var i = 0; i < results.length; i++) {
+						console.log('status is ok, creating places');
+						
+						// populate markersArray and markerNamesArray
+						self.markersArray.push(results[i]);
+						self.markerNamesArray.push(results[i].name);
+						console.log(results[i].name);
+						
+						new google.maps.Marker({
+					    	position: results[i].geometry.location,
+					    	map: self.map(),
+					    	title: results[i].name
+					    });
+					}
+				}
+			};
+
+			self.service().nearbySearch(self.request(), createMarker);
+		}
+	});
+
 	// initializes knockout properties, renders map
-	self.initialize = ko.computed(function () {
+	self.initialize = ko.computed(function() {
 		if (navigator.geolocation) {
 	    	var success = function (pos) {
 	    		self.pos(pos.coords);
@@ -133,32 +182,15 @@ var MapViewModel = function() {
   //   		_drawGooglePlaces(mapDrawn);
   //   	};
 
-  //   	var drawUserMarker = function(_mapDrawn) {
-  //   		console.log('rendering user position');
-		    
-		//     var map = _mapDrawn;
-
-		//     var userMarker = new google.maps.Marker({
-		//     	position: mapObj.mapCenter(),
-		//     	map: map,
-		//     	title: 'You are here!'
-		//     });
-
-		//     google.maps.event.addListener(userMarker, 'click', function() {
-		// 		infoWindow.setContent('You are here');
-		// 		infoWindow.open(map, this);
-		// 	});
-  //   	};
-
   //   	var drawGooglePlaces = function(_mapDrawn) {
   //   		console.log('rendering Google Places');
 
   //   		var service = new google.maps.places.PlacesService(_mapDrawn);		
-		// 	var request = {
-		// 		location: mapObj.mapCenter(),
-		// 		radius: '6200',
-		// 		types: ['art_gallery', 'book_store', 'cafe', 'museum']
-		// 	};	
+			// var request = {
+			// 	location: mapObj.mapCenter(),
+			// 	radius: '6200',
+			// 	types: ['art_gallery', 'book_store', 'cafe', 'museum']
+			// };	
 
 		// 	var createMarker = function(placeObj) {
 		// 		var placeLocation = placeObj.geometry.location;
@@ -178,15 +210,15 @@ var MapViewModel = function() {
 		// 		});
 		// 	};
 
-		// 	var callback = function(results, status) {
-		// 		if (status == google.maps.places.PlacesServiceStatus.OK) {
-		// 			for (var i = 0; i < results.length; i++) {
-		// 				createMarker(results[i]);
-		// 				// createNewPlaceObj(results[i]);
-		// 			}
-		// 			// renderFlickr(placeNameArray);
-		// 		}
-		// 	};
+			// var callback = function(results, status) {
+			// 	if (status == google.maps.places.PlacesServiceStatus.OK) {
+			// 		for (var i = 0; i < results.length; i++) {
+			// 			createMarker(results[i]);
+			// 			// createNewPlaceObj(results[i]);
+			// 		}
+			// 		// renderFlickr(placeNameArray);
+			// 	}
+			// };
 
 		//     service.nearbySearch(request, callback);
   //   	};
