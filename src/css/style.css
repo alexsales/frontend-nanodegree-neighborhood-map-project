@@ -53,6 +53,21 @@ label {
 
 
 /*-- ID Selectors --*/
+#business-list {
+	width: 33%;
+	height: 66%;
+	position: absolute;
+	bottom: 0;
+	z-index: 99;
+	overflow: auto;
+	background-color: #fff;	
+	left: 5%;
+}
+#business-list > ul {
+	height: 10%;
+	list-style-type: none;
+}
+
 #city-input-form {
 	width: 33%;
 	position: absolute;

@@ -25,13 +25,17 @@ var MapViewModel = function() {
     self.mapOptions = ko.observable({});
     self.map = ko.observable({});
 	self.markersArray = ko.observableArray();
-	self.markerNamesArray = ko.observableArray();    
+	self.markerNamesArray = ko.observableArray();  
+
+	self.businessTypes = ['art_gallery', 'book_store', 'cafe', 'museum'];
+	self.selectedBusinessTypes = ko.observableArray([]);
 
 	//-- BEHAVIOR --//
 	// geocodes address and renders map of user's inputted city
 	self.geocodeCity = function(d, evt) {
 		console.log('new city');
 		console.log(self.city());
+		console.log(self.selectedBusinessTypes());
 
 		self.addressToArray = ko.observable(self.city().split(' '));
 		self.addressToString = ko.observable(self.addressToArray().join('+'));
@@ -106,34 +110,66 @@ var MapViewModel = function() {
 		if (Object.keys(self.map()).length != 0) {
 			console.log('business markers rendering');
 			console.log(self.map());
+			console.log(self.selectedBusinessTypes());
+			console.log(self.request());
 
 			self.service(new google.maps.places.PlacesService(self.mapDrawn()));
 			self.request({
 				location: self.mapCenter(),
 				radius: '6200',
-				types: ['art_gallery', 'book_store', 'cafe', 'museum']
+				types: self.selectedBusinessTypes()
 			});
 
 			var createMarker = function(results, status) {
 				if (status == google.maps.places.PlacesServiceStatus.OK) {
 					for (var i = 0; i < results.length; i++) {
-						console.log('status is ok, creating places');
+						console.log(results[i]);
 						
-						// populate markersArray and markerNamesArray
-						self.markersArray.push(results[i]);
-						self.markerNamesArray.push(results[i].name);
-						console.log(results[i].name);
-						
-						new google.maps.Marker({
+						var bNamePlaceIdArray = [];
+
+						self.marker = ko.observable(new google.maps.Marker({
 					    	position: results[i].geometry.location,
 					    	map: self.map(),
+					    	placeId: results[i].place_id,
 					    	title: results[i].name
-					    });
+					    }));
+
+						bNamePlaceIdArray.push(results[i].name);
+						bNamePlaceIdArray.push(results[i].place_id);
+
+						// populate markersArray and markerNamesArray
+						self.markersArray.push(bNamePlaceIdArray);
+						// self.markerNamesArray.push(self.marker().title);
+
+		    		    google.maps.event.addListener(self.marker(), 'click', (function(sameString, sameMarker) {
+		    		    	return function() {
+		    		    		console.log(sameString);
+
+								var infowindow = new google.maps.InfoWindow({
+									content: sameString
+								});		
+								    		    		
+			    		    	infowindow.open(self.map(), sameMarker);
+		    		    	}
+						})(bNamePlaceIdArray[0], self.marker()));
+
+		    		    document.getElementById(bNamePlaceIdArray[1]).addEventListener('click', (function(sameId){
+		    		    	return function() {
+			    		    	console.log('found place id');
+			    		    	console.log(sameId);
+		    		    	}
+		    		    })(bNamePlaceIdArray[1]));
 					}
 				}
+				console.log(self.markersArray());
 			};
 
-			self.service().nearbySearch(self.request(), createMarker);
+			if (self.selectedBusinessTypes().length == 0) {
+				console.log('empty array');
+			} else {
+				console.log('non-empty array');
+				self.service().nearbySearch(self.request(), createMarker);
+			}
 		}
 	});
 
@@ -163,80 +199,6 @@ var MapViewModel = function() {
 	        noGeoLoc();
 	    }
 	});
-
-
-
-
-
-
-
-
-  //  	self.renderMapAndUser = function(pos) {
-  //   	var mapObj = new Map(pos);
-		// var infoWindow = new google.maps.InfoWindow();
-
-  //   	var drawMap = function(_mapObj, _drawUserMarker, _drawGooglePlaces) {	
-  //   		var mapDrawn = new google.maps.Map(document.getElementById('map-canvas'), _mapObj.mapOptions());
-
-  //   		_drawUserMarker(mapDrawn);
-  //   		_drawGooglePlaces(mapDrawn);
-  //   	};
-
-  //   	var drawGooglePlaces = function(_mapDrawn) {
-  //   		console.log('rendering Google Places');
-
-  //   		var service = new google.maps.places.PlacesService(_mapDrawn);		
-			// var request = {
-			// 	location: mapObj.mapCenter(),
-			// 	radius: '6200',
-			// 	types: ['art_gallery', 'book_store', 'cafe', 'museum']
-			// };	
-
-		// 	var createMarker = function(placeObj) {
-		// 		var placeLocation = placeObj.geometry.location;
-		// 		var map = _mapDrawn;
-		// 		var marker = new google.maps.Marker({
-		// 			position: placeLocation,
-		// 			map: map,
-		// 			title: placeObj.name
-		// 		});
-
-		// 		self.markersArray.push(placeObj);
-		// 		self.markerNamesArray.push(placeObj.name);
-
-		// 		google.maps.event.addListener(marker, 'click', function() {
-		// 			infoWindow.setContent(placeObj.name);
-		// 			infoWindow.open(map, this);
-		// 		});
-		// 	};
-
-			// var callback = function(results, status) {
-			// 	if (status == google.maps.places.PlacesServiceStatus.OK) {
-			// 		for (var i = 0; i < results.length; i++) {
-			// 			createMarker(results[i]);
-			// 			// createNewPlaceObj(results[i]);
-			// 		}
-			// 		// renderFlickr(placeNameArray);
-			// 	}
-			// };
-
-		//     service.nearbySearch(request, callback);
-  //   	};
-
-  //   	drawMap(mapObj, drawUserMarker, drawGooglePlaces);
-  //   };
-
-	// Check if geolocation is enabled in user's browser
-	// self.initialize = ko.computed(function() {
-	//     if (navigator.geolocation) {
-	//         // Send getCurrentPosition server response to success callback
-	//         navigator.geolocation.getCurrentPosition(self.renderMapAndUser);
-	//     } else {
-	//         self.noGeoLoc();
-	//     }
-	// });
-
-	// google.maps.event.addDomListener(window, 'load', self.initialize);
 };
 
 ko.applyBindings(new MapViewModel());

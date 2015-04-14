@@ -14,13 +14,20 @@
 	</head>
 	<body>
 		<form id="city-input-form" data-bind="submit: geocodeCity">
+			<div data-bind="foreach: businessTypes">
+				<label>
+					<input type="checkbox" name="business-type" data-bind="attr: { value: $data }, checked: $root.selectedBusinessTypes" /><span data-bind="text: $data"></span>
+				</label>
+			</div>
 			<input type="text" placeholder='"Los Angeles, CA" or "90032"' data-bind="value: city" />
-			<label for="art-galleries"><input type="checkbox" value="art-galleries" id="art-galleries" name="business-type" checked />art galleries</label>
-			<label for="bookstores"><input type="checkbox" value="bookstores" id="bookstores" name="business-type" checked />bookstores</label>
-			<label for="coffee-shops"><input type="checkbox" value="coffee-shops" id="coffee-shops" name="business-type" checked />coffee shops</label>
-			<label for="museums"><input type="checkbox" value="museums" id="museums" name="business-type" checked />museums</label>
 		</form>
 		<div id="map-canvas"></div>
+		
+		<div id="business-list">
+			<ul data-bind="foreach: markersArray">
+				<li><a data-bind="text: $data[0], attr: { 'id': $data[1] }"></a></li>
+			</ul>
+		</div>
 
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.js"></script>
