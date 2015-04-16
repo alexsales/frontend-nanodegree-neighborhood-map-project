@@ -14,10 +14,10 @@
 	</head>
 	<body>
 		<form id="city-input-form" data-bind="submit: geocodeCity">
-			<div data-bind="foreach: businessTypes">
+			<div>
 				<label>
-					<input type="checkbox" name="business-type" data-bind="checked: $root.selectedBusinessTypes, checkedValue: $data.type, valueUpdate: 'afterkeydown'" /><span data-bind="text: $data.plainName"></span>
-				</label>				
+					<input type="checkbox" name="business-type" data-bind="checked: $root.selectedBusinessTypes, checkedValue: businessTypes[1].type" /><span data-bind="text: businessTypes[1].plainName"></span>
+				</label>								
 			</div>
 			<input type="text" placeholder='"Los Angeles, CA" or "90032"' data-bind="value: city" />
 		</form>
