@@ -16,8 +16,8 @@
 		<form id="city-input-form" data-bind="submit: geocodeCity">
 			<div data-bind="foreach: businessTypes">
 				<label>
-					<input type="checkbox" name="business-type" data-bind="attr: { value: $data }, checked: $root.selectedBusinessTypes" /><span data-bind="text: $data"></span>
-				</label>
+					<input type="checkbox" name="business-type" data-bind="checked: $root.selectedBusinessTypes, checkedValue: $data.type, valueUpdate: 'afterkeydown'" /><span data-bind="text: $data.plainName"></span>
+				</label>				
 			</div>
 			<input type="text" placeholder='"Los Angeles, CA" or "90032"' data-bind="value: city" />
 		</form>
@@ -25,7 +25,7 @@
 		
 		<div id="business-list">
 			<ul data-bind="foreach: markersArray">
-				<li><a data-bind="text: $data[0], attr: { 'id': $data[1] }"></a></li>
+				<li><a data-bind="text: $data.title, attr: { 'id': $data.placeId }"></a></li>
 			</ul>
 		</div>
 

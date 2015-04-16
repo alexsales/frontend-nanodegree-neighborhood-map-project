@@ -27,8 +27,23 @@ var MapViewModel = function() {
 	self.markersArray = ko.observableArray();
 	self.markerNamesArray = ko.observableArray();  
 
-	self.businessTypes = ['art_gallery', 'book_store', 'cafe', 'museum'];
+	self.businessTypes = [
+		{ type: 'art_gallery', plainName: 'art galleries' },
+		{ type: 'book_store', plainName: 'book stores' },
+		{ type: 'cafe', plainName: 'cafes' },
+		{ type: 'museum', plainName: 'museums' }
+	];
+
 	self.selectedBusinessTypes = ko.observableArray([]);
+	self.artGalleryArray = ko.observableArray([]);
+	self.bookStoreArray = ko.observableArray([]);
+	self.cafeArray = ko.observableArray([]);
+	self.museumArray = ko.observableArray([]);
+
+	self.service = ko.observable();
+	self.infoWindow = ko.observable();
+	self.request = ko.observable({});
+	// self.mapMarkersArray = ko.observableArray([]);
 
 	//-- BEHAVIOR --//
 	// geocodes address and renders map of user's inputted city
@@ -101,17 +116,9 @@ var MapViewModel = function() {
 	// render markers for Google Places that match business types listed in API request,
 	// initially set to ['art_gallery', 'book_store', 'cafe', 'museum']
 	self.drawBusinessMarkers = ko.computed(function() {
-		self.service = ko.observable();
-		self.businessMarkers = ko.observable();
-		self.infoWindow = ko.observable();
-		self.request = ko.observable({});
-
-		// check to see make sure map object has loaded before rendering businessMarkers
+		// check to see make sure map object has loaded before rendering markers
 		if (Object.keys(self.map()).length != 0) {
 			console.log('business markers rendering');
-			console.log(self.map());
-			console.log(self.selectedBusinessTypes());
-			console.log(self.request());
 
 			self.service(new google.maps.places.PlacesService(self.mapDrawn()));
 			self.request({
@@ -121,9 +128,28 @@ var MapViewModel = function() {
 			});
 
 			var createMarker = function(results, status) {
-				if (status == google.maps.places.PlacesServiceStatus.OK) {
+				if (status == google.maps.places.PlacesServiceStatus.OK
+					&& self.selectedBusinessTypes().length != 0) {
+
+					// test: delete all markers here
+					// console.log all current markers and map
+					// then setup to clear all markers
+					for (var i = 0; i < self.markersArray().length; i++) {
+						self.markersArray()[i].setMap(null);
+						self.markersArray([]);
+					}
+					console.log(self.markersArray());
+
+					// for (var i = 0; i < self.mapMarkersArray().length; i++) {
+					// 	self.mapMarkersArray[i].setMap(null);
+					// }
+					// self.mapMarkersArray([]);
+					// console.log(self.mapMarkersArray());
+
 					for (var i = 0; i < results.length; i++) {
+						console.log(results.length);
 						console.log(results[i]);
+						console.log(self.markersArray());
 						
 						var bNamePlaceIdArray = [];
 
@@ -134,12 +160,14 @@ var MapViewModel = function() {
 					    	title: results[i].name
 					    }));
 
+					    // self.mapMarkersArray.push(self.marker);
+
 						bNamePlaceIdArray.push(results[i].name);
 						bNamePlaceIdArray.push(results[i].place_id);
 
 						// populate markersArray and markerNamesArray
-						self.markersArray.push(bNamePlaceIdArray);
-						// self.markerNamesArray.push(self.marker().title);
+						// self.markersArray.push(bNamePlaceIdArray);
+						self.markersArray.push(self.marker());
 
 		    		    google.maps.event.addListener(self.marker(), 'click', (function(sameString, sameMarker) {
 		    		    	return function() {
@@ -159,9 +187,12 @@ var MapViewModel = function() {
 			    		    	console.log(sameId);
 		    		    	}
 		    		    })(bNamePlaceIdArray[1]));
+
+		    		    // test: console.log markers array to make sure they exist, then delete below
+		    		    // console.log(self.mapMarkersArray());
+
 					}
 				}
-				console.log(self.markersArray());
 			};
 
 			if (self.selectedBusinessTypes().length == 0) {
@@ -170,6 +201,7 @@ var MapViewModel = function() {
 				console.log('non-empty array');
 				self.service().nearbySearch(self.request(), createMarker);
 			}
+
 		}
 	});
 
