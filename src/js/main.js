@@ -113,98 +113,6 @@ var MapViewModel = function() {
 		}
 	});
 
-	// render markers for Google Places that match business types listed in API request,
-	// initially set to ['art_gallery', 'book_store', 'cafe', 'museum']
-	// self.drawBusinessMarkers = ko.computed(function() {
-	// 	// check to see make sure map object has loaded before rendering markers
-	// 	if (Object.keys(self.map()).length != 0) {
-	// 		console.log('business markers rendering');
-
-	// 		self.service(new google.maps.places.PlacesService(self.mapDrawn()));
-	// 		self.request({
-	// 			location: self.mapCenter(),
-	// 			radius: '6200',
-	// 			types: self.selectedBusinessTypes()
-	// 		});
-
-	// 		var createMarker = function(results, status) {
-	// 			if (status == google.maps.places.PlacesServiceStatus.OK
-	// 				&& self.selectedBusinessTypes().length != 0) {
-
-	// 				// test: delete all markers here
-	// 				// console.log all current markers and map
-	// 				// then setup to clear all markers
-	// 				for (var i = 0; i < self.markersArray().length; i++) {
-	// 					self.markersArray()[i].setMap(null);
-	// 					self.markersArray([]);
-	// 				}
-	// 				console.log(self.markersArray());
-
-	// 				// for (var i = 0; i < self.mapMarkersArray().length; i++) {
-	// 				// 	self.mapMarkersArray[i].setMap(null);
-	// 				// }
-	// 				// self.mapMarkersArray([]);
-	// 				// console.log(self.mapMarkersArray());
-
-	// 				for (var i = 0; i < results.length; i++) {
-	// 					console.log(results.length);
-	// 					console.log(results[i]);
-	// 					console.log(self.markersArray());
-						
-	// 					var bNamePlaceIdArray = [];
-
-	// 					self.marker = ko.observable(new google.maps.Marker({
-	// 				    	position: results[i].geometry.location,
-	// 				    	map: self.map(),
-	// 				    	placeId: results[i].place_id,
-	// 				    	title: results[i].name
-	// 				    }));
-
-	// 				    // self.mapMarkersArray.push(self.marker);
-
-	// 					bNamePlaceIdArray.push(results[i].name);
-	// 					bNamePlaceIdArray.push(results[i].place_id);
-
-	// 					// populate markersArray and markerNamesArray
-	// 					// self.markersArray.push(bNamePlaceIdArray);
-	// 					self.markersArray.push(self.marker());
-
-	// 	    		    google.maps.event.addListener(self.marker(), 'click', (function(sameString, sameMarker) {
-	// 	    		    	return function() {
-	// 	    		    		console.log(sameString);
-
-	// 							var infowindow = new google.maps.InfoWindow({
-	// 								content: sameString
-	// 							});		
-								    		    		
-	// 		    		    	infowindow.open(self.map(), sameMarker);
-	// 	    		    	}
-	// 					})(bNamePlaceIdArray[0], self.marker()));
-
-	// 	    		    document.getElementById(bNamePlaceIdArray[1]).addEventListener('click', (function(sameId){
-	// 	    		    	return function() {
-	// 		    		    	console.log('found place id');
-	// 		    		    	console.log(sameId);
-	// 	    		    	}
-	// 	    		    })(bNamePlaceIdArray[1]));
-
-	// 	    		    // test: console.log markers array to make sure they exist, then delete below
-	// 	    		    // console.log(self.mapMarkersArray());
-
-	// 				}
-	// 			}
-	// 		};
-
-	// 		if (self.selectedBusinessTypes().length == 0) {
-	// 			console.log('empty array');
-	// 		} else {
-	// 			console.log('non-empty array');
-	// 			self.service().nearbySearch(self.request(), createMarker);
-	// 		}
-
-	// 	}
-	// });
-
 	self.toggleCheckbox = ko.computed(function() {
 		if (self.selectedBusinessTypes().indexOf('book_store') < 0) {
 			console.log('books do not exist');
@@ -213,14 +121,14 @@ var MapViewModel = function() {
 				self.bookStoreArray()[i].setMap(null);
 
 				self.markersArray.removeAll();
-				self.bookStoreArray.removeAll();
+				// self.bookStoreArray.removeAll();
 				// console.log(self.markersArray());
 				// console.log(self.bookStoreArray());
 			}
 
 		} else {
 			console.log('books exist');
-		}
+		}	
 	});
 
 	self.drawBusinessMarkers = ko.computed(function() {
@@ -258,8 +166,12 @@ var MapViewModel = function() {
 					    	self.bookStoreArray().push(self.marker());
 					    }
 
-					    console.log(self.bookStoreArray());
-					    console.log(self.museumArray());
+					    if (results[i].types.indexOf('cafe') > -1) {
+					    	self.bookStoreArray().push(self.marker());
+					    }
+
+					    // console.log(self.bookStoreArray());
+					    // console.log(self.museumArray());
 					    // self.mapMarkersArray.push(self.marker);
 
 						// bNamePlaceIdArray.push(results[i].name);
