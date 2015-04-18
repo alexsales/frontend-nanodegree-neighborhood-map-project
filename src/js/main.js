@@ -14,6 +14,7 @@ var Map = function (lat, lng) {
 var MapViewModel = function() {
 	//-- DATA --//
 	var self = this;
+	var infowindow = new google.maps.InfoWindow();
 
 	self.city = ko.observable('');
 	self.pos = ko.observable();
@@ -29,21 +30,21 @@ var MapViewModel = function() {
 
 	self.businessTypes = [
 		{ type: 'art_gallery', plainName: 'art galleries' },
+		{ type: 'museum', plainName: 'museums' },
 		{ type: 'book_store', plainName: 'book stores' },
-		{ type: 'cafe', plainName: 'cafes' },
-		{ type: 'museum', plainName: 'museums' }
+		{ type: 'cafe', plainName: 'cafes' }
+
 	];
 
 	self.selectedBusinessTypes = ko.observableArray([]);
 	self.artGalleryArray = ko.observableArray([]);
-	self.bookStoreArray = ko.observableArray([]);
+	self.bookStoreArray = ko.observableArray();
 	self.cafeArray = ko.observableArray([]);
 	self.museumArray = ko.observableArray([]);
 
 	self.service = ko.observable();
 	self.infoWindow = ko.observable();
 	self.request = ko.observable({});
-	// self.mapMarkersArray = ko.observableArray([]);
 
 	//-- BEHAVIOR --//
 	// geocodes address and renders map of user's inputted city
@@ -85,6 +86,16 @@ var MapViewModel = function() {
     	}).fail(function() {
     		console.log('Check your internet connection');
     	});
+
+		clearArtGalleryMarkers();
+		clearMuseumMarkers();
+		clearBookStoreMarkers();
+		clearCafeMarkers();
+
+		$('#art_gallery').prop('checked', false);
+		$('#museum').prop('checked', false);
+		$('#book_store').prop('checked', false);
+		$('#cafe').prop('checked', false);
 	};
 
 	// renders Google Maps marker for city's center (user's position)
@@ -113,108 +124,338 @@ var MapViewModel = function() {
 		}
 	});
 
-	self.toggleCheckbox = ko.computed(function() {
-		if (self.selectedBusinessTypes().indexOf('book_store') < 0) {
-			console.log('books do not exist');
+	// art galleries
+	var displayArtGalleryMarkers = function() {
+		console.log('inside displayArts func');
+		console.log(self.artGalleryArray());
+		
+		self.service(new google.maps.places.PlacesService(self.mapDrawn()));
+		self.request({
+			location: self.mapCenter(),
+			radius: '6200',
+			types: ['art_gallery']
+		});
 
-			for (var i = 0; i < self.bookStoreArray().length; i++) {
-				self.bookStoreArray()[i].setMap(null);
+		function listArtGalleries() {
+			var artGalleriesUl = $('#art-galleries');
 
-				self.markersArray.removeAll();
-				// self.bookStoreArray.removeAll();
-				// console.log(self.markersArray());
-				// console.log(self.bookStoreArray());
+			for (var i = 0; i < self.artGalleryArray().length; i++) {
+				var idAttrVal = self.artGalleryArray()[i].placeId;
+				var marker = self.artGalleryArray()[i];
+				var businessName = self.artGalleryArray()[i].title;
+				var listItem = '<li><a id="' + idAttrVal + '">' + businessName + '</a></li>';
+
+				artGalleriesUl.append(listItem);
+
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
+					return function() {
+    		    		infowindow.setContent(sameTitle);
+	    		    	infowindow.open(self.map(), sameMarker);
+					}
+				})(marker.title, marker));
 			}
 
-		} else {
-			console.log('books exist');
-		}	
+			artGalleriesUl.css('display', 'normal');
+		};
+
+		function createMarkers(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				for (var i = 0; i < results.length; i++) {
+
+					marker = new google.maps.Marker({
+						position: results[i].geometry.location,
+						map: self.map(),
+						placeId: results[i].place_id,
+						title: results[i].name
+					});	
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+	    		    	return function() {								    		    		
+	    		    		infowindow.setContent(sameString);
+		    		    	infowindow.open(self.map(), sameMarker);
+	    		    	}
+					})(marker.title, marker));	
+
+					self.artGalleryArray().push(marker);							  
+				}
+			}
+			if (self.artGalleryArray().length != 0) {
+				listArtGalleries();
+			}
+		};
+		self.service().nearbySearch(self.request(), createMarkers);
+	};
+
+	var clearArtGalleryMarkers = function() {
+		var artGalleriesUl = $('#art-galleries');
+
+		for (var i = 0; i < self.artGalleryArray().length; i++) {
+			self.artGalleryArray()[i].setMap(null);
+		}
+
+		artGalleriesUl.html('');
+		self.artGalleryArray.removeAll();
+	};
+
+	$('#art_gallery').change(function() {
+			if (this.checked) {
+				console.log('this is checked');
+				displayArtGalleryMarkers();
+			}
+			if (!this.checked) {
+				console.log('this NOT checked');
+				clearArtGalleryMarkers();
+			}
 	});
 
-	self.drawBusinessMarkers = ko.computed(function() {
-		// check to see make sure map object has loaded before rendering markers
-		if (Object.keys(self.map()).length != 0) {
-			console.log('business markers rendering');
+	// museums
+	var displayMuseumMarkers = function() {
+		console.log('inside displayMuseums func');
+		console.log(self.museumArray());
 
-			self.service(new google.maps.places.PlacesService(self.mapDrawn()));
-			self.request({
-				location: self.mapCenter(),
-				radius: '6200',
-				types: self.selectedBusinessTypes()
-			});
+		self.service(new google.maps.places.PlacesService(self.mapDrawn()));
+		self.request({
+			location: self.mapCenter(),
+			radius: '6200',
+			types: ['museum']
+		});
 
-			var createMarker = function(results, status) {
-				if (status == google.maps.places.PlacesServiceStatus.OK
-					&& self.selectedBusinessTypes().length != 0) {
+		function listMuseums() {
+			var museumsUl = $('#museums');
 
-					for (var i = 0; i < results.length; i++) {
-						// console.log(results.length);
-						console.log(results[i]);
-						// console.log(self.markersArray());
-						
-						// var bNamePlaceIdArray = [];					
-						var infowindow = new google.maps.InfoWindow();
+			for (var i = 0; i < self.museumArray().length; i++) {
+				var idAttrVal = self.museumArray()[i].placeId;
+				var marker = self.museumArray()[i];
+				var businessName = self.museumArray()[i].title;
+				var listItem = '<li><a id="' + idAttrVal + '">' + businessName + '</a></li>';			
 
-						self.marker = ko.observable(new google.maps.Marker({
-					    	position: results[i].geometry.location,
-					    	map: self.map(),
-					    	placeId: results[i].place_id,
-					    	title: results[i].name
-					    }));
+				museumsUl.append(listItem);
 
-					    if (results[i].types.indexOf('book_store') > -1) {
-					    	self.bookStoreArray().push(self.marker());
-					    }
-
-					    if (results[i].types.indexOf('cafe') > -1) {
-					    	self.bookStoreArray().push(self.marker());
-					    }
-
-					    // console.log(self.bookStoreArray());
-					    // console.log(self.museumArray());
-					    // self.mapMarkersArray.push(self.marker);
-
-						// bNamePlaceIdArray.push(results[i].name);
-						// bNamePlaceIdArray.push(results[i].place_id);
-
-						// populate markersArray and markerNamesArray
-						// self.markersArray.push(bNamePlaceIdArray);
-						self.markersArray.push(self.marker());
-
-		    		    google.maps.event.addListener(self.marker(), 'click', (function(sameString, sameMarker) {	
-		    		    	return function() {
-		    		    		console.log(sameString);							
-
-		    		    		infowindow.setContent(sameString);
-			    		    	infowindow.open(self.map(), sameMarker);
-		    		    	}
-						})(self.marker().title, self.marker()));
-
-		    		    document.getElementById(self.markersArray()[i].placeId).addEventListener('click', (function(sameId, sameString, sameMarker){
-		    		    	return function() {
-			    		    	console.log('found place id');
-			    		    	console.log(sameId);
-
-		    		    		infowindow.setContent(sameString);
-			    		    	infowindow.open(self.map(), sameMarker);			    		    	
-		    		    	}
-		    		    })(self.markersArray()[i].placeId, self.marker().title, self.marker()));
-
-		    		    // test: console.log markers array to make sure they exist, then delete below
-		    		    // console.log(self.mapMarkersArray());
-
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
+					return function() {
+    		    		infowindow.setContent(sameTitle);
+	    		    	infowindow.open(self.map(), sameMarker);
 					}
-					console.log(self.markersArray());
-				}
-			};
-
-			if (self.selectedBusinessTypes().length == 0) {
-				console.log('empty array');
-			} else {
-				console.log('non-empty array');
-				self.service().nearbySearch(self.request(), createMarker);
+				})(marker.title, marker));				
 			}
 
+			museumsUl.css('display', 'normal');				
+		};
+
+		function createMarkers(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				for (var i = 0; i < results.length; i++) {					
+					marker = new google.maps.Marker({
+						position: results[i].geometry.location,
+						map: self.map(),
+						placeId: results[i].place_id,
+						title: results[i].name
+					});	
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+	    		    	return function() {
+	    		    		infowindow.setContent(sameString);
+		    		    	infowindow.open(self.map(), sameMarker);
+	    		    	}
+					})(marker.title, marker));	
+
+					self.museumArray().push(marker);							  
+				}
+			}
+			if (self.museumArray().length != 0) {
+				listMuseums();
+			}
+		};
+		self.service().nearbySearch(self.request(), createMarkers);
+	};
+
+	var clearMuseumMarkers = function() {
+		var museumsUl = $('#museums');
+
+		for (var i = 0; i < self.museumArray().length; i++) {
+			self.museumArray()[i].setMap(null);
+		}
+
+		museumsUl.html('');
+		self.museumArray.removeAll();
+	};
+
+	$('#museum').change(function() {
+		if (this.checked) {
+			console.log('this is checked');
+			displayMuseumMarkers();
+		}
+		if (!this.checked) {
+			console.log('this NOT checked');
+			clearMuseumMarkers();
+		}
+	});
+
+	// book stores
+	var displayBookStoreMarkers = function() {
+		console.log('inside displayBooks func');
+		console.log(self.bookStoreArray());
+
+		self.service(new google.maps.places.PlacesService(self.mapDrawn()));
+		self.request({
+			location: self.mapCenter(),
+			radius: '6200',
+			types: ['book_store']
+		});
+
+		function listBookStores() {
+			var bookStoresUl = $('#book-stores');
+
+			for (var i = 0; i < self.bookStoreArray().length; i++) {
+				var idAttrVal = self.bookStoreArray()[i].placeId;
+				var marker = self.bookStoreArray()[i];
+				var businessName = self.bookStoreArray()[i].title;
+				var listItem = '<li><a id="' + idAttrVal + '">' + businessName + '</a></li>';
+
+				bookStoresUl.append(listItem);
+
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
+					return function() {
+    		    		infowindow.setContent(sameTitle);
+	    		    	infowindow.open(self.map(), sameMarker);
+					}
+				})(marker.title, marker));				
+			}
+
+			bookStoresUl.css('display', 'normal');
+		};
+
+		function createMarkers(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				for (var i = 0; i < results.length; i++) {
+
+					marker = new google.maps.Marker({
+						position: results[i].geometry.location,
+						map: self.map(),
+						placeId: results[i].place_id,
+						title: results[i].name
+					});	
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+	    		    	return function() {
+	    		    		infowindow.setContent(sameString);
+		    		    	infowindow.open(self.map(), sameMarker);
+	    		    	}
+					})(marker.title, marker));	
+
+					self.bookStoreArray().push(marker);							  
+				}
+			}
+			if (self.bookStoreArray().length != 0) {
+				listBookStores();
+			}
+		};
+		self.service().nearbySearch(self.request(), createMarkers);
+	};
+
+	var clearBookStoreMarkers = function() {
+		var bookStoresUl = $('#book-stores');
+
+		for (var i = 0; i < self.bookStoreArray().length; i++) {
+			self.bookStoreArray()[i].setMap(null);
+		}
+
+		bookStoresUl.html('');
+		self.bookStoreArray.removeAll();
+	};
+
+	$('#book_store').change(function() {
+		if (this.checked) {
+			console.log('this is checked');
+			displayBookStoreMarkers();
+		}
+		if (!this.checked) {
+			console.log('this NOT checked');
+			clearBookStoreMarkers();
+		}
+	});
+
+	// cafes
+	var displayCafeMarkers = function() {
+		console.log('inside displayCafes func');
+		console.log(self.cafeArray());
+
+		self.service(new google.maps.places.PlacesService(self.mapDrawn()));
+		self.request({
+			location: self.mapCenter(),
+			radius: '6200',
+			types: ['cafe']
+		});
+
+		function listCafes() {
+			var cafesUl = $('#cafes');
+
+			for (var i = 0; i < self.cafeArray().length; i++) {
+				var idAttrVal = self.cafeArray()[i].placeId;
+				var marker = self.cafeArray()[i];
+				var businessName = self.cafeArray()[i].title;
+				var listItem = '<li><a id="' + idAttrVal + '">' + businessName + '</a></li>';
+
+				cafesUl.append(listItem);
+
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
+					return function() {
+    		    		infowindow.setContent(sameTitle);
+	    		    	infowindow.open(self.map(), sameMarker);
+					}
+				})(marker.title, marker));				
+			}
+
+			cafesUl.css('display', 'normal');				
+		};
+
+		function createMarkers(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+				for (var i = 0; i < results.length; i++) {
+
+					marker = new google.maps.Marker({
+						position: results[i].geometry.location,
+						map: self.map(),
+						placeId: results[i].place_id,
+						title: results[i].name
+					});	
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+	    		    	return function() {
+	    		    		infowindow.setContent(sameString);
+		    		    	infowindow.open(self.map(), sameMarker);
+	    		    	}
+					})(marker.title, marker));	
+
+					self.cafeArray().push(marker);							  
+				}
+			}
+			if (self.cafeArray().length != 0) {
+				listCafes();
+			}
+		};
+		self.service().nearbySearch(self.request(), createMarkers);
+	};
+
+	var clearCafeMarkers = function() {
+		var cafesUl = $('#cafes');
+
+		for (var i = 0; i < self.cafeArray().length; i++) {
+			self.cafeArray()[i].setMap(null);
+		}
+
+		cafesUl.html('');
+		self.cafeArray.removeAll();
+	};
+
+	$('#cafe').change(function() {
+		if (this.checked) {
+			console.log('this is checked');
+			displayCafeMarkers();
+		}
+		if (!this.checked) {
+			console.log('this NOT checked');
+			clearCafeMarkers();
 		}
 	});
 
@@ -237,6 +478,8 @@ var MapViewModel = function() {
 			    });
 			    self.map(new google.maps.Map(document.getElementById('map-canvas'),
 			        self.mapOptions()));
+
+			    $(':checkbox').parent().parent().css('display', 'inline');
 	    	};
 
 	        navigator.geolocation.getCurrentPosition(success);

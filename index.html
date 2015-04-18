@@ -16,17 +16,27 @@
 		<form id="city-input-form" data-bind="submit: geocodeCity">
 			<div>
 				<label>
-					<input type="checkbox" name="business-type" data-bind="checked: $root.selectedBusinessTypes, checkedValue: businessTypes[1].type" /><span data-bind="text: businessTypes[1].plainName"></span>
-				</label>								
+					<input id="art_gallery" type="checkbox" name="business-type" value="art_gallery" /><span data-bind="text: businessTypes[0].plainName"></span>
+				</label>
+				<label>
+					<input id="museum" type="checkbox" name="business-type" value="museum" /><span data-bind="text: businessTypes[1].plainName"></span>
+				</label>			
+				<label>
+					<input id="book_store" type="checkbox" name="business-type" value="book_store" /><span data-bind="text: businessTypes[2].plainName"></span>
+				</label>
+				<label>
+					<input id="cafe" type="checkbox" name="business-type" value="cafe" /><span data-bind="text: businessTypes[3].plainName"></span>
+				</label>												
 			</div>
 			<input type="text" placeholder='"Los Angeles, CA" or "90032"' data-bind="value: city" />
 		</form>
 		<div id="map-canvas"></div>
 		
 		<div id="business-list">
-			<ul data-bind="foreach: markersArray">
-				<li><a data-bind="text: $data.title, attr: { 'id': $data.placeId }"></a></li>
-			</ul>
+			<ul id="art-galleries"></ul>
+			<ul id="museums"></ul>
+			<ul id="book-stores"></ul>
+			<ul id="cafes"></ul>
 		</div>
 
 		<!-- bower:js -->

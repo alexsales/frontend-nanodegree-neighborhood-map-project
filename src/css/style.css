@@ -64,8 +64,9 @@ label {
 	left: 5%;
 }
 #business-list > ul {
-	height: 10%;
+	// height: 10%;
 	list-style-type: none;
+	margin-bottom: 0;
 }
 
 #city-input-form {
@@ -74,6 +75,10 @@ label {
 	top: 8%;
 	left: 5%;
 	z-index: 99;
+}
+
+#city-input-form div {
+	display: none;
 }
 
 #city-input-form > input {
