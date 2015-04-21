@@ -15,6 +15,7 @@ var MapViewModel = function() {
 	//-- DATA --//
 	var self = this;
 	var infowindow = new google.maps.InfoWindow();
+	var imageArray = [];
 
 	self.city = ko.observable('');
 	self.pos = ko.observable();
@@ -124,6 +125,43 @@ var MapViewModel = function() {
 		}
 	});
 
+	var createFlickrPlaces = function(googlePlace) {
+		// console.log('Flickr:')
+		console.log(googlePlace);
+
+	    var placeName = googlePlace.name;
+	    var placeLat = googlePlace.geometry.location.k;
+	    var placeLon = googlePlace.geometry.location.D;
+	    var placeUrlEncodedName = encodeURIComponent(placeName);
+	   	var photoSrcUrl = '';
+	   	var photoImageTag = '';
+
+	    apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + placeUrlEncodedName + '&content_type=1&accuracy=11&tag_mode=all&min_upload_date=2014&media=photos&lat=' + placeLat + '&lon=' + placeLon + '&format=json&nojsoncallback=1';
+
+	    // get random image and push to flickrImageArray
+	    $.getJSON(apiResponse, function(data) {
+	    	console.log(data);
+
+	    	if (data.photos.total > 4) {
+	    		for (var i = 0; i < 4; i++) {
+			    	console.log(data.photos.photo[i]);
+
+			    	var farmId = data.photos.photo[i].farm;
+			        var serverId = data.photos.photo[i].server;
+			        var photoId = data.photos.photo[i].id;
+			        var secret = data.photos.photo[i].secret;
+
+					// photoSrcUrl = '2cool';	
+			        photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_t.jpg';
+			        photoImageTag += '<img src=' + photoSrcUrl + ' />'
+			    }
+			}     
+
+			imageArray.push(photoImageTag);
+			console.log(imageArray);
+	    });
+	};
+
 	// art galleries
 	var displayArtGalleryMarkers = function() {
 		console.log('inside displayArts func');
@@ -161,6 +199,9 @@ var MapViewModel = function() {
 		function createMarkers(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
+					// console.log(results[0]);
+
+					createFlickrPlaces(results[i]);
 
 					marker = new google.maps.Marker({
 						position: results[i].geometry.location,
@@ -169,14 +210,19 @@ var MapViewModel = function() {
 						title: results[i].name
 					});	
 
-	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
-	    		    	return function() {								    		    		
-	    		    		infowindow.setContent(sameString);
+	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker, sameI) {	
+	    		    	return function() {
+	    		    		console.log(imageArray);
+	    		    		console.log(sameI)
+	    		    		// console.log(sameResultObj);
+							// console.log(createFlickrPlaces(sameResultObj));
+							// console.log(sameImage);
+	    		    		infowindow.setContent(sameString + '<br />' + imageArray[sameI]);
 		    		    	infowindow.open(self.map(), sameMarker);
 	    		    	}
-					})(marker.title, marker));	
+					})(marker.title, marker, i));	
 
-					self.artGalleryArray().push(marker);							  
+					self.artGalleryArray().push(marker);	
 				}
 			}
 			if (self.artGalleryArray().length != 0) {
