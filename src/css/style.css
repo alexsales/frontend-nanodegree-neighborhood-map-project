@@ -31,7 +31,6 @@ html, body, #map-canvas {
 	padding: 0;
 	margin: 0;
 	height: 100%;
-
 }
 
 input[type="checkbox"] {
@@ -54,25 +53,44 @@ label {
 
 /*-- ID Selectors --*/
 #business-list {
-	width: 33%;
-	height: 66%;
+	width: 22%;
+	max-height: 66%;
 	position: absolute;
-	bottom: 0;
-	z-index: 99;
+	bottom: 0px;
+	z-index: 79;
 	overflow: auto;
-	background-color: #fff;	
+	background-color: rgba(239, 244, 250, 0.75);
+	color: #0738B6;
 	left: 5%;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	display: none;
+	font-size: 100%;
+	line-height: 175%;
 }
 #business-list > ul {
 	// height: 10%;
 	list-style-type: none;
 	margin-bottom: 0;
+	padding: 0 10px 0 15px;
 }
 
+#business-list > ul#art-galleries {
+	// height: 10%;
+	padding: 8px 10px 0 15px;
+}
+
+#business-list > ul#cafes {
+	// height: 10%;
+	padding: 0 10px 12px 15px;
+}	
+
 #city-input-form {
-	width: 33%;
+	width: 22%;
+	min-height: 75px;
 	position: absolute;
-	top: 8%;
+	top: 50px;
 	left: 5%;
 	z-index: 99;
 }

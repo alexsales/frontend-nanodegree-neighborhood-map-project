@@ -15,7 +15,10 @@ var MapViewModel = function() {
 	//-- DATA --//
 	var self = this;
 	var infowindow = new google.maps.InfoWindow();
-	var imageArray = [];
+	var imageArtArray = [];
+	var imageMuseumArray = [];
+	var imageBookArray = [];
+	var imageCafeArray = [];
 
 	self.city = ko.observable('');
 	self.pos = ko.observable();
@@ -125,7 +128,7 @@ var MapViewModel = function() {
 		}
 	});
 
-	var createFlickrPlaces = function(googlePlace) {
+	var createFlickrPlaces = function(googlePlace, index, style) {
 		// console.log('Flickr:')
 		console.log(googlePlace);
 
@@ -136,29 +139,34 @@ var MapViewModel = function() {
 	   	var photoSrcUrl = '';
 	   	var photoImageTag = '';
 
-	    apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + placeUrlEncodedName + '&content_type=1&accuracy=11&tag_mode=all&min_upload_date=2014&media=photos&lat=' + placeLat + '&lon=' + placeLon + '&format=json&nojsoncallback=1';
+	    apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + placeUrlEncodedName + '&content_type=1&accuracy=13&tag_mode=all&min_upload_date=2014&media=photos&lat=' + placeLat + '&lon=' + placeLon + '&format=json&nojsoncallback=1';
 
 	    // get random image and push to flickrImageArray
 	    $.getJSON(apiResponse, function(data) {
 	    	console.log(data);
 
-	    	if (data.photos.total > 4) {
-	    		for (var i = 0; i < 4; i++) {
-			    	console.log(data.photos.photo[i]);
+	    	if (data.photos.total > 1) {
+		    	console.log(data.photos.photo[1]);
 
-			    	var farmId = data.photos.photo[i].farm;
-			        var serverId = data.photos.photo[i].server;
-			        var photoId = data.photos.photo[i].id;
-			        var secret = data.photos.photo[i].secret;
+		    	var farmId = data.photos.photo[1].farm;
+		        var serverId = data.photos.photo[1].server;
+		        var photoId = data.photos.photo[1].id;
+		        var secret = data.photos.photo[1].secret;
 
-					// photoSrcUrl = '2cool';	
-			        photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_t.jpg';
-			        photoImageTag += '<img src=' + photoSrcUrl + ' />'
-			    }
-			}     
+				// photoSrcUrl = '2cool';	
+		        photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
+		        photoImageTag += '<img src=' + photoSrcUrl + ' />'
+			}
 
-			imageArray.push(photoImageTag);
-			console.log(imageArray);
+			if (style == 'art gallery') {
+				imageArtArray[index] = photoImageTag;
+			} else if (style == 'museum') {
+				imageMuseumArray[index] = photoImageTag;
+			} else if (style == 'book store') {
+				imageBookArray[index] = photoImageTag;
+			} else {
+				imageCafeArray[index] = photoImageTag;
+			}
 	    });
 	};
 
@@ -185,12 +193,18 @@ var MapViewModel = function() {
 
 				artGalleriesUl.append(listItem);
 
-				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
-					return function() {
-    		    		infowindow.setContent(sameTitle);
-	    		    	infowindow.open(self.map(), sameMarker);
-					}
-				})(marker.title, marker));
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker, sameI) {	
+	    		    	return function() {
+	    		    		console.log(imageArtArray);
+	    		    		console.log(sameI)
+
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageArtArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+		    		    	$(this).css('color', '#EF0012');		    		    	
+	    		    	}
+					})(marker.title, marker, i)
+				);
 			}
 
 			artGalleriesUl.css('display', 'normal');
@@ -199,30 +213,35 @@ var MapViewModel = function() {
 		function createMarkers(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
-					// console.log(results[0]);
+					var idAttrVal = '';
 
-					createFlickrPlaces(results[i]);
+					createFlickrPlaces(results[i], i, 'art gallery');
+					console.log(results);
+					console.log(results[i]);
 
 					marker = new google.maps.Marker({
 						position: results[i].geometry.location,
 						map: self.map(),
 						placeId: results[i].place_id,
 						title: results[i].name
-					});	
+					});
+					self.artGalleryArray.push(marker);	
+					console.log(self.artGalleryArray());
 
-	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker, sameI) {	
+					idAttrVal = self.artGalleryArray()[i].placeId;
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameTitle, sameMarker, sameI, sameIdAttrVal) {	
 	    		    	return function() {
-	    		    		console.log(imageArray);
+	    		    		console.log(imageArtArray);
 	    		    		console.log(sameI)
-	    		    		// console.log(sameResultObj);
-							// console.log(createFlickrPlaces(sameResultObj));
-							// console.log(sameImage);
-	    		    		infowindow.setContent(sameString + '<br />' + imageArray[sameI]);
-		    		    	infowindow.open(self.map(), sameMarker);
-	    		    	}
-					})(marker.title, marker, i));	
 
-					self.artGalleryArray().push(marker);	
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageArtArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+				    		    	$('#'+sameIdAttrVal).css('color', '#EF0012');  	
+	    		    	}
+					})(marker.title, marker, i, idAttrVal));	
+
 				}
 			}
 			if (self.artGalleryArray().length != 0) {
@@ -247,10 +266,15 @@ var MapViewModel = function() {
 			if (this.checked) {
 				console.log('this is checked');
 				displayArtGalleryMarkers();
+				$('#business-list').show();
 			}
 			if (!this.checked) {
 				console.log('this NOT checked');
 				clearArtGalleryMarkers();
+
+				if ($('input:checked').length == 0) {
+					$('#business-list').hide();				
+				}
 			}
 	});
 
@@ -277,12 +301,18 @@ var MapViewModel = function() {
 
 				museumsUl.append(listItem);
 
-				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
-					return function() {
-    		    		infowindow.setContent(sameTitle);
-	    		    	infowindow.open(self.map(), sameMarker);
-					}
-				})(marker.title, marker));				
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker, sameI) {	
+	    		    	return function() {
+	    		    		console.log(imageMuseumArray);
+	    		    		console.log(sameI)
+
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageMuseumArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+		    		    	$(this).css('color', '#EF0012');		    		    	
+	    		    	}
+					})(marker.title, marker, i)
+				);			
 			}
 
 			museumsUl.css('display', 'normal');				
@@ -290,22 +320,36 @@ var MapViewModel = function() {
 
 		function createMarkers(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				for (var i = 0; i < results.length; i++) {					
+				for (var i = 0; i < results.length; i++) {
+					var idAttrVal = '';
+
+					createFlickrPlaces(results[i], i, 'museum');
+					console.log(results);
+					console.log(results[i]);
+
 					marker = new google.maps.Marker({
 						position: results[i].geometry.location,
 						map: self.map(),
 						placeId: results[i].place_id,
 						title: results[i].name
 					});	
+					self.museumArray.push(marker);	
+					console.log(self.museumArray());
 
-	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+					idAttrVal = self.museumArray()[i].placeId;
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameTitle, sameMarker, sameI, sameIdAttrVal) {	
 	    		    	return function() {
-	    		    		infowindow.setContent(sameString);
-		    		    	infowindow.open(self.map(), sameMarker);
-	    		    	}
-					})(marker.title, marker));	
+	    		    		console.log(imageMuseumArray);
+	    		    		console.log(sameI)
 
-					self.museumArray().push(marker);							  
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageMuseumArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+		    		    	$('#'+sameIdAttrVal).css('color', '#EF0012');    		    	
+	    		    	}
+					})(marker.title, marker, i, idAttrVal));	
+
 				}
 			}
 			if (self.museumArray().length != 0) {
@@ -330,10 +374,15 @@ var MapViewModel = function() {
 		if (this.checked) {
 			console.log('this is checked');
 			displayMuseumMarkers();
+			$('#business-list').show();
 		}
 		if (!this.checked) {
 			console.log('this NOT checked');
 			clearMuseumMarkers();
+
+			if ($('input:checked').length == 0) {
+				$('#business-list').hide();				
+			}
 		}
 	});
 
@@ -360,12 +409,18 @@ var MapViewModel = function() {
 
 				bookStoresUl.append(listItem);
 
-				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
-					return function() {
-    		    		infowindow.setContent(sameTitle);
-	    		    	infowindow.open(self.map(), sameMarker);
-					}
-				})(marker.title, marker));				
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker, sameI) {	
+	    		    	return function() {
+	    		    		console.log(imageBookArray);
+	    		    		console.log(sameI)
+
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageBookArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+		    		    	$(this).css('color', '#EF0012');		    		    	
+	    		    	}
+					})(marker.title, marker, i)
+				);				
 			}
 
 			bookStoresUl.css('display', 'normal');
@@ -374,6 +429,11 @@ var MapViewModel = function() {
 		function createMarkers(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
+					var idAttrVal = '';
+
+					createFlickrPlaces(results[i], i, 'book store');
+					console.log(results);
+					console.log(results[i]);
 
 					marker = new google.maps.Marker({
 						position: results[i].geometry.location,
@@ -381,15 +441,23 @@ var MapViewModel = function() {
 						placeId: results[i].place_id,
 						title: results[i].name
 					});	
+					self.bookStoreArray.push(marker);	
+					console.log(self.bookStoreArray());
 
-	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+					idAttrVal = self.bookStoreArray()[i].placeId;
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameTitle, sameMarker, sameI, sameIdAttrVal) {	
 	    		    	return function() {
-	    		    		infowindow.setContent(sameString);
-		    		    	infowindow.open(self.map(), sameMarker);
-	    		    	}
-					})(marker.title, marker));	
+	    		    		console.log(imageBookArray);
+	    		    		console.log(sameI)
 
-					self.bookStoreArray().push(marker);							  
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageBookArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+							$('#business-list li a').css('color', 'inherit');
+							$('#'+sameIdAttrVal).css('color', '#EF0012');
+	    		    	}
+					})(marker.title, marker, i, idAttrVal));	
+
 				}
 			}
 			if (self.bookStoreArray().length != 0) {
@@ -414,10 +482,15 @@ var MapViewModel = function() {
 		if (this.checked) {
 			console.log('this is checked');
 			displayBookStoreMarkers();
+			$('#business-list').show();
 		}
 		if (!this.checked) {
 			console.log('this NOT checked');
 			clearBookStoreMarkers();
+
+			if ($('input:checked').length == 0) {
+				$('#business-list').hide();				
+			}
 		}
 	});
 
@@ -444,12 +517,18 @@ var MapViewModel = function() {
 
 				cafesUl.append(listItem);
 
-				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker) {
-					return function() {
-    		    		infowindow.setContent(sameTitle);
-	    		    	infowindow.open(self.map(), sameMarker);
-					}
-				})(marker.title, marker));				
+				document.getElementById(idAttrVal).addEventListener('click', (function(sameTitle, sameMarker, sameI) {	
+	    		    	return function() {
+	    		    		console.log(imageCafeArray);
+	    		    		console.log(sameI)
+
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageCafeArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+		    		    	$('#business-list li a').css('color', 'inherit');
+		    		    	$(this).css('color', '#EF0012');
+	    		    	}
+					})(marker.title, marker, i)
+				);				
 			}
 
 			cafesUl.css('display', 'normal');				
@@ -458,6 +537,11 @@ var MapViewModel = function() {
 		function createMarkers(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
+					var idAttrVal = '';
+
+					createFlickrPlaces(results[i], i, 'cafe');
+					console.log(results);
+					console.log(results[i]);
 
 					marker = new google.maps.Marker({
 						position: results[i].geometry.location,
@@ -465,15 +549,23 @@ var MapViewModel = function() {
 						placeId: results[i].place_id,
 						title: results[i].name
 					});	
+					self.cafeArray.push(marker);	
+					console.log(self.cafeArray());
 
-	    		    google.maps.event.addListener(marker, 'click', (function(sameString, sameMarker) {	
+					idAttrVal = self.cafeArray()[i].placeId;
+
+	    		    google.maps.event.addListener(marker, 'click', (function(sameTitle, sameMarker, sameI, sameIdAttrVal) {	
 	    		    	return function() {
-	    		    		infowindow.setContent(sameString);
-		    		    	infowindow.open(self.map(), sameMarker);
-	    		    	}
-					})(marker.title, marker));	
+	    		    		console.log(imageCafeArray);
+	    		    		console.log(sameI)
 
-					self.cafeArray().push(marker);							  
+	    		    		infowindow.setContent(sameTitle + '<br />' + imageCafeArray[sameI]);
+		    		    	infowindow.open(self.map(), sameMarker);
+							$('#business-list li a').css('color', 'inherit');
+							$('#'+sameIdAttrVal).css('color', '#EF0012');
+	    		    	}
+					})(marker.title, marker, i, idAttrVal));	
+
 				}
 			}
 			if (self.cafeArray().length != 0) {
@@ -498,10 +590,15 @@ var MapViewModel = function() {
 		if (this.checked) {
 			console.log('this is checked');
 			displayCafeMarkers();
+			$('#business-list').show();
 		}
 		if (!this.checked) {
 			console.log('this NOT checked');
 			clearCafeMarkers();
+
+			if ($('input:checked').length == 0) {
+				$('#business-list').hide();				
+			}
 		}
 	});
 
