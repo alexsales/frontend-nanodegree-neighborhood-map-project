@@ -65,8 +65,8 @@ label {
 	border-right: 1px solid #ccc;
 	border-left: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
-	display: none;
-	font-size: 100%;
+	// display: none;
+	font-size: 95%;
 	line-height: 175%;
 }
 #business-list > ul {
@@ -96,7 +96,7 @@ label {
 }
 
 #city-input-form div {
-	display: none;
+	// display: none;
 }
 
 #city-input-form > input {

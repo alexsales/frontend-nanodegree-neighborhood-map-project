@@ -13,22 +13,22 @@
 		<link rel="stylesheet" href="src/css/style.css">
 	</head>
 	<body>
-		<form id="city-input-form" data-bind="submit: geocodeCity">
+		<form id="city-input-form">
 			<div>
 				<label>
-					<input id="art_gallery" type="checkbox" name="business-type" value="art_gallery" /><span data-bind="text: businessTypes[0].plainName"></span>
+					<input id="art-gallery" type="checkbox" name="business-type" value="art_gallery" /><span></span>
 				</label>
 				<label>
-					<input id="museum" type="checkbox" name="business-type" value="museum" /><span data-bind="text: businessTypes[1].plainName"></span>
+					<input id="museum" type="checkbox" name="business-type" value="museum" /><span></span>
 				</label>			
 				<label>
-					<input id="book_store" type="checkbox" name="business-type" value="book_store" /><span data-bind="text: businessTypes[2].plainName"></span>
+					<input id="book-store" type="checkbox" name="business-type" value="book_store" /><span></span>
 				</label>
 				<label>
-					<input id="cafe" type="checkbox" name="business-type" value="cafe" /><span data-bind="text: businessTypes[3].plainName"></span>
+					<input id="cafe" type="checkbox" name="business-type" value="cafe" /><span></span>
 				</label>												
 			</div>
-			<input type="text" placeholder='"Los Angeles, CA" or "90032"' data-bind="value: city" />
+			<input id="city-input" type="text" placeholder='"Los Angeles, CA" or "90032"' />
 		</form>
 		<div id="map-canvas"></div>
 		
