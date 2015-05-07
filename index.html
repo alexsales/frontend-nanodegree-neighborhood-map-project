@@ -16,27 +16,22 @@
 		<form id="city-input-form">
 			<div>
 				<label>
-					<input id="art-gallery" type="checkbox" name="business-type" value="art_gallery" /><span></span>
+					<input id="art_gallery" type="checkbox" name="business-type" value="art_gallery" /><span>art galleries</span>
 				</label>
 				<label>
-					<input id="museum" type="checkbox" name="business-type" value="museum" /><span></span>
-				</label>			
-				<label>
-					<input id="book-store" type="checkbox" name="business-type" value="book_store" /><span></span>
-				</label>
-				<label>
-					<input id="cafe" type="checkbox" name="business-type" value="cafe" /><span></span>
-				</label>												
+					<input id="museum" type="checkbox" name="business-type" value="museum" /><span>museums</span>
+				</label>															
 			</div>
 			<input id="city-input" type="text" placeholder='"Los Angeles, CA" or "90032"' />
 		</form>
 		<div id="map-canvas"></div>
 		
 		<div id="business-list">
+			<div id="search-box"></div>
+			<p>press ENTER key when finished</p>
+			<ul id="filtered-businesses"></ul>
 			<ul id="art-galleries"></ul>
 			<ul id="museums"></ul>
-			<ul id="book-stores"></ul>
-			<ul id="cafes"></ul>
 		</div>
 
 		<!-- bower:js -->

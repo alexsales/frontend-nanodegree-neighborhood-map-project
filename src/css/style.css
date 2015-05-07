@@ -56,7 +56,7 @@ label {
 	width: 22%;
 	max-height: 66%;
 	position: absolute;
-	bottom: 0px;
+	bottom: -999px;
 	z-index: 79;
 	overflow: auto;
 	background-color: rgba(239, 244, 250, 0.75);
@@ -68,6 +68,7 @@ label {
 	// display: none;
 	font-size: 95%;
 	line-height: 175%;
+	padding-top: 8px;
 }
 #business-list > ul {
 	// height: 10%;
@@ -75,17 +76,20 @@ label {
 	margin-bottom: 0;
 	padding: 0 10px 0 15px;
 }
-
 #business-list > ul#art-galleries {
 	// height: 10%;
-	padding: 8px 10px 0 15px;
+	padding: 0 10px 0 15px;
 }
-
-#business-list > ul#cafes {
+#business-list > ul#museums {
 	// height: 10%;
 	padding: 0 10px 12px 15px;
-}	
-
+}
+#business-list p {
+	margin-left: 15px;
+	color: #666;
+	font-size: 80%;
+	font-style: italic;
+}
 #city-input-form {
 	width: 22%;
 	min-height: 75px;
@@ -94,14 +98,19 @@ label {
 	left: 5%;
 	z-index: 99;
 }
-
 #city-input-form div {
-	// display: none;
+	display: none;
 }
-
 #city-input-form > input {
 	width: 100%;
 	color: #366;
 	padding-left: 5px;
 	margin-bottom: 3px;
+}
+#search-box input {
+	width: 94%;
+	margin-left: 3%;
+	overflow: hidden;
+	margin-top: 1px;
+	margin-bottom: 2px;	
 }
