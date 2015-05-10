@@ -2,8 +2,8 @@ var model = {
 	businessTypes: ['art_gallery', 'museum'],
 	businessArraysObj: {
 		artArray: [],
-		museumArray: [],
-		all: []
+		museumArray: []
+		// all: []
 	},
 	flickrImagesObj: {
 		artArray: [],
@@ -27,141 +27,101 @@ var octopus = {
 			streetViewControl: false
 		};
 	},
-	UserMarker: function(renderedMap, mapCenter, title) {
-		this.renderedMap = renderedMap;
+	setupFlickrArray: function(addFlickrImages) {
+		console.log('inside flickr');
+		console.log(addFlickrImages);
 
-		// userPos is the same as the mapCenter
-		this.userPos = mapCenter;
-		this.title = title;
-	},
-	flickrImages: function (type, callback) {	
-		console.log(type);
+		var placeName = '';
+		var placeLat = null;
+		var placeLng = null;
+		var placeUrlEncodedName = null;
+		var photoSrcUrl = '';
+		var photoImageTag = '';
 
-		if (type == 'art_gallery') {
-			var artArray = model.businessArraysObj.artArray;
-			for (var i = 0; i < 20; i++) {
-				// console.log(artArray);
-				var placeName = artArray[i].title;
-				var placeLat = artArray[i].position.lat();
-				var placeLng = artArray[i].position.lng();
-				var placeUrlEncodedName = encodeURIComponent(placeName);
-				var photoSrcUrl = '';
-				var photoImageTag = '';
-				console.log(i);
-
-				apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + placeUrlEncodedName + '&content_type=1&accuracy=13&tag_mode=all&min_upload_date=2014&media=photos&lat=' + placeLat + '&lon=' + placeLng + '&format=json&nojsoncallback=1';
-
-				// get a Flickr image
-				function processArtjSON(apiResponse, i) {
-					console.log('inside art gallery json');
-					$.getJSON(apiResponse, function(data) {
-						console.log(data);
-						// console.log(i);
-
-						if (data.photos.total > 1) {
-							var photoArrayItem = data.photos.photo[1];
-							var farmId = photoArrayItem.farm;
-							var serverId = photoArrayItem.server;
-							var photoId = photoArrayItem.id;
-							var secret = photoArrayItem.secret;
-
-							photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
-							photoImageTag = '<img src="' + photoSrcUrl + '" />';
-
-							model.flickrImagesObj.artArray[i] = photoImageTag;
-							console.log(model.flickrImagesObj.artArray);
-							// console.log('flickr1');
-							console.log(photoImageTag);
-							console.log(i);
-							// flickrImagesObj.flickrArt[inputCityListener]
-							callback(type, photoImageTag, i);
-					
-						}
-					});
-				}
-
-				console.log('calling art gallery json');
-				processArtjSON(apiResponse, i);
+		var fillFlickrArrays = function (i, type, image) {
+			console.log('inside fill arrays');
+			console.log(image);
+			if (type == 'artArray') {
+				model.flickrImagesObj.artArray[i] = image;
 			}
-		}
-		if (type == 'museum') {
-			var museumArray = model.businessArraysObj.museumArray;
-
-			for (var i = 0; i < 20; i++) {
-				// console.log(artArray);
-				var placeName = museumArray[i].title;
-				var placeLat = museumArray[i].position.lat();
-				var placeLng = museumArray[i].position.lng();
-				var placeUrlEncodedName = encodeURIComponent(placeName);
-				var photoSrcUrl = '';
-				var photoImageTag = '';
-				console.log(i);
-
-				apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + placeUrlEncodedName + '&content_type=1&accuracy=13&tag_mode=all&min_upload_date=2014&media=photos&lat=' + placeLat + '&lon=' + placeLng + '&format=json&nojsoncallback=1';
-
-				// get a Flickr image
-				function processMuseumjSON(apiResponse, i) {
-					$.getJSON(apiResponse, function(data) {
-						console.log(data);
-						// console.log(i);
-
-						if (data.photos.total > 1) {
-							var photoArrayItem = data.photos.photo[1];
-							var farmId = photoArrayItem.farm;
-							var serverId = photoArrayItem.server;
-							var photoId = photoArrayItem.id;
-							var secret = photoArrayItem.secret;
-
-							photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
-							photoImageTag = '<img src="' + photoSrcUrl + '" />';
-
-							model.flickrImagesObj.museumArray[i] = photoImageTag;
-							console.log(model.flickrImagesObj.artArray);
-							// console.log('flickr1');
-							console.log(photoImageTag);
-							console.log(i);
-							// flickrImagesObj.flickrArt[inputCityListener]
-							callback(type, photoImageTag, i);
-					
-						} 
-					});
-				}
-
-				processMuseumjSON(apiResponse, i);
+			if (type == 'museumArray') {
+				model.flickrImagesObj.museumArray[i] = image;
 			}
-		}
-	},
-	twentyBusinessList: function (type, imageTag, i) {
-		console.log(i);
-		console.log(imageTag);
-		if (type == 'art_gallery') {
-				var businessName = model.businessArraysObj.artArray[i].title;
-				var idAttrVal = model.businessArraysObj.artArray[i].placeId;
+		};
 
-				console.log('flickr2');
-				console.log(imageTag);
+		var processJSON = function (response, index, type, fillArrays) {
+			$.getJSON(response, function(data) {
+				console.log('inside getJSON');
+
+				if (data.photos.total > 1) {
+					var photoArrayItem = data.photos.photo[1];
+					var farmId = photoArrayItem.farm;
+					var serverId = photoArrayItem.server;
+					var photoId = photoArrayItem.id;
+					var secret = photoArrayItem.secret;
+
+					photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
+					photoImageTag = '<img src="' + photoSrcUrl + '" />';
+
+					console.log(type);
+					console.log(photoImageTag);
+				}						
 				
-				document.getElementById('art-galleries').style.display = 'none';
-				view.renderArtList(businessName, idAttrVal, model.businessArraysObj.artArray[i], imageTag);
-		}
-		if (type == 'museum') {
-				var businessName = model.businessArraysObj.museumArray[i].title;
-				var idAttrVal = model.businessArraysObj.museumArray[i].placeId;
+				fillArrays(index, type, photoImageTag);
+			});
+		};
 
-				document.getElementById('museums').style.display = 'none';
-				view.renderMuseumList(businessName, idAttrVal, model.businessArraysObj.museumArray[i], imageTag);		
-		}
+		var flickrAPI = function(name, lat, lng, type, i) {
+			apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + name + '&content_type=1&accuracy=13&tag_mode=all&min_upload_date=2014&media=photos&lat=' + lat + '&lon=' + lng + '&format=json&nojsoncallback=1';
+
+			processJSON(apiResponse, i, type, fillFlickrArrays);
+		};
+
+		model.businessArraysObj.artArray.forEach(function(value, index, array) {
+			console.log('inside bArtArray');
+
+			var marker = value;
+			var i = index;
+			var type = 'artArray';
+
+			placeName = marker.title;
+			placeLat = marker.lat;
+			placeLng = marker.lng;
+			placeUrlEncodedName = encodeURIComponent(placeName);
+
+			(function(samePlaceUrlEncodedName, samePlaceLat, samePlaceLng, sameType, sameI) {
+				flickrAPI(samePlaceUrlEncodedName, samePlaceLat, samePlaceLng, sameType, sameI);
+			})(placeUrlEncodedName, placeLat, placeLng, type, i);
+		});
+
+		model.businessArraysObj.museumArray.forEach(function(value, index, array) {
+			console.log('inside bMuseumArray');
+
+			var marker = value;
+			var i = index;
+			var type = 'museumArray';
+
+			placeName = marker.title;
+			placeLat = marker.lat;
+			placeLng = marker.lng;
+			placeUrlEncodedName = encodeURIComponent(placeName);
+
+			(function(samePlaceUrlEncodedName, samePlaceLat, samePlaceLng, sameType, sameI) {
+				flickrAPI(samePlaceUrlEncodedName, samePlaceLat, samePlaceLng, sameType, sameI);
+			})(placeUrlEncodedName, placeLat, placeLng, type, i);
+		});
+
+		addFlickrImages();
 	},
-	twentyBusinessMarkers: function(element, index, array) {
-		// renderedMap, mapCenter, type, bizType
-		// console.log(element);
-		// console.log(index);
-		// console.log(array);
-
+	addMarkerListener: function(marker, name, id, tag, image) {
+		google.maps.event.addListener(marker, 'click', function() {
+			marker.infoWin();
+		});
+	},	
+	setupBusinessMarkers: function(value, index, array) {
 		var renderedMap = model.drawnMap;
 		var mapCenter = model.mapCenter;
-		var type = element;		
-		// console.log(renderedMap);
+		var type = value;		
 
 		var service = new google.maps.places.PlacesService(renderedMap);
 		var request = {
@@ -169,86 +129,100 @@ var octopus = {
 			radius: '6200',
 			types: [type]
 		};
-		var infoWin = new google.maps.InfoWindow();
 
 		function createMarkersArray(results, status) {
-			if (status == google.maps.places.PlacesServiceStatus.OK) {
-				for (var i = 0; i < 20; i++) {					
-					var lat = results[i].geometry.location.lat();
-					var lng = results[i].geometry.location.lng();
-					var latLngPosition = new google.maps.LatLng(lat, lng);
-					var placeId = results[i].place_id;
-					var title = results[i].name;
-					var placeUrlEncodedName = encodeURIComponent(title);
-					var photoSrcUrl = '';
+			function createMarkers(populateFlickrArray) {
+				// console.log(results);
+				if (status == google.maps.places.PlacesServiceStatus.OK) {
+					for (var i = 0; i < results.length; i++) {
+						var lat = results[i].geometry.location.lat();
+						var lng = results[i].geometry.location.lng();
+						var latLngPosition = new google.maps.LatLng(lat, lng);
+						var placeId = results[i].place_id;
+						var title = results[i].name;
+						var placeUrlEncodedName = encodeURIComponent(title);
+						var photoSrcUrl = '';
+						var marker = view.renderMarker(renderedMap, lat, lng, latLngPosition, placeId, title);
 
-					// populate artArray, museumArray
-					if (type == 'art_gallery') {
-						var marker = view.renderMarker(renderedMap, latLngPosition, placeId, title);
-						console.log(marker);
+						// model.businessArraysObj.all.length = 0;
 
-						model.businessArraysObj.all.length = 0;
-						model.businessArraysObj.artArray[i] = marker;
-						marker.setMap(null);
-						// document.getElementById('art-galleries').style.display = 'none';
-					}
-					if (type == 'museum') {
-						var marker = view.renderMarker(renderedMap, latLngPosition, placeId, title);
+						// populate artArray, museumArray
+						if (type == 'art_gallery') {
+							console.log(type + ' and ' + marker.title);
 
-						model.businessArraysObj.all.length = 0;
-						model.businessArraysObj.museumArray[i] = marker;
-						marker.setMap(null);
-						// document.getElementById('museums').style.display = 'none';
-					}
+							(function(sameMap, samePos, sameId, sameTitle, sameMarker, sameI) {
+								model.businessArraysObj.artArray[sameI] = sameMarker;
+								marker.setMap(null);								
 
-					// when finish populating any of the arrays, setup flickr iamges and ul business-list
-					if (i == 19) {
-						console.log(type);
-						octopus.flickrImages(type, octopus.twentyBusinessList);
+								if (sameI == 19) {
+									console.log('sameI is ' + sameI);
+
+									octopus.setupFlickrArray(view.renderFlickrImages);
+								}
+								view.renderArtListItem(sameMap, samePos, sameId, sameTitle);
+								octopus.addMarkerListener(sameMarker, sameTitle, sameId);
+							})(renderedMap, latLngPosition, placeId, title, marker, i);
+						}
+						if (type == 'museum') {
+							console.log(type + ' and ' + marker.title);
+
+							(function(sameMap, samePos, sameId, sameTitle, sameMarker, sameI) {
+
+								model.businessArraysObj.museumArray[i] = marker;
+								marker.setMap(null);								
+								if (sameI == 19) {
+									console.log('sameI is ' + sameI);
+
+									octopus.setupFlickrArray(view.renderFlickrImages);
+								}								
+								view.renderMuseumListItem(sameMap, samePos, sameId, sameTitle);
+								octopus.addMarkerListener(sameMarker, sameTitle, sameId);
+							})(renderedMap, latLngPosition, placeId, title, marker, i);
+						}
+
+						// if (i == 19) {
+						// 	console.log('i is ' + i);
+						// 	octopus.setupFlickrArray();			
+						// }
 					}
 				}
-
-				// // lastly, concat all of the above arrays, and for each marker, addListener and infoWindow
-				// model.businessArraysObj.all = model.businessArraysObj.artArray.concat(model.businessArraysObj.museumArray);
-				// model.businessArraysObj.all.forEach(function(element, index, array) {
-				// 	google.maps.event.addListener(element, 'click', (function(sameTitle) {
-				// 		return function() {
-				// 			model.infoWin.setContent(sameTitle);
-				// 			model.infoWin.open(model.drawnMap, this);								
-				// 		}
-				// 	})(element.title));		
-				// });
-		
 			}
+
+			createMarkers(octopus.setupFlickrArray);
 		}
 
 		service.nearbySearch(request, createMarkersArray); 
 	},
 	inputCheckboxListeners: function() {
-		model.businessTypes.forEach(function(element, index, array) {
-			var elTag = document.getElementById(element);
-			
+		var elTag = null;
+
+		model.businessTypes.forEach(function(element, index, array) {	
+			elTag = document.getElementById(element);
 			elTag.addEventListener('change', function() {
 				if (this.checked) {
 					console.log(element + ' is checked');
 
 					if (element == 'art_gallery') {
 						document.getElementById('business-list').style.top = '22%';
-
 						model.businessArraysObj.artArray.forEach(function(element, index, array) {
 							element.setMap(model.drawnMap);
 						});
 						document.getElementById('art-galleries').style.display = 'block';
-						// octopus.flickrImages('art_gallery', octopus.twentyBusinessList)
+
+						if (document.getElementById('museum').checked == false) {
+							document.getElementById('museums').style.display = 'none';
+						}
 					}
 					if (element == 'museum') {
 						document.getElementById('business-list').style.top = '22%';
-
 						model.businessArraysObj.museumArray.forEach(function(element, index, array) {
 							element.setMap(model.drawnMap);
 						});
 						document.getElementById('museums').style.display = 'block';
-						// octopus.flickrImages('art_gallery', octopus.twentyBusinessList)
+
+						if (document.getElementById('art_gallery').checked == false) {
+							document.getElementById('art-galleries').style.display = 'none';
+						}	
 					}
 				}
 				if (!this.checked) {
@@ -284,7 +258,10 @@ var octopus = {
 			e.preventDefault();
 
 			document.getElementById('search-box').innerHTML = '';
-			
+			document.getElementById('business-list').style.bottom = '-999px';	
+			document.getElementById('business-list').style.top = null;
+			document.getElementById('filtered-businesses').innerHTML = '';
+						
 			var artCheckboxInput = document.getElementById('art_gallery');
 			var museumCheckboxInput = document.getElementById('museum');
 			var city = document.getElementById('city-input').value;
@@ -295,14 +272,11 @@ var octopus = {
 			
 			var serverBasedAPI = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + cityToString + '&key=AIzaSyB4mgEnfU7A2ngaDKEJBbsIs7qLxT7ULCg';
 
-			document.getElementById('business-list').style.bottom = '-999px';	
-			document.getElementById('business-list').style.top = null;
-			document.getElementById('filtered-businesses').innerHTML = '';
 
 			artCheckboxInput.disabled = false;
 			museumCheckboxInput.disabled = false;
 
-			view.clearMarkers(model.businessArraysObj);
+			view.clearMarkers();
 
 			$.getJSON(serverBasedAPI, function(data) {
 				console.log(data);
@@ -315,9 +289,6 @@ var octopus = {
 
 		    		var mapObj = new octopus.Map(cityLat, cityLng);
 		    		var drawnMap = view.renderMap(mapObj.mapOptions);
-
-		    		// marker position is the same as mapCenter
-		    		var cityCenterMarkerObj = new octopus.UserMarker(drawnMap, mapObj.mapCenter);
 					var userMarker = view.renderUserMarker(drawnMap, mapObj.mapCenter);
 
 					google.maps.event.addListener(userMarker, 'click', function() {
@@ -325,12 +296,14 @@ var octopus = {
 						model.infoWin.open(drawnMap, this);
 					});
 
-					view.clearMarkers(model.businessArraysObj);
-					view.checkCheckboxes();
+					view.clearMarkers();
+					view.uncheckCheckboxes();
 					view.showCheckboxes();
 					model.drawnMap = drawnMap;
 					model.mapCenter = mapObj.mapCenter;
-			   		model.businessTypes.forEach(octopus.twentyBusinessMarkers);
+
+
+			   		model.businessTypes.forEach(octopus.setupBusinessMarkers);
 				}
 	    	}).fail(function() {
 	    		console.log('Check your internet connection');
@@ -343,11 +316,8 @@ var octopus = {
 	},
 	businessSearch: function() {
 		console.log(model.textArrayNew);
-		// console.log(model.businessArraysObj.artArray);
-		// console.log(model.businessArraysObj.museumArray);
 
 		var len = model.textArrayNew.length;
-		// var businessNamesArray = [];
 		var itExistsArray = [];
 
 		function filterNamesArray(namesArray) {
@@ -357,27 +327,23 @@ var octopus = {
 
 			function checkItem(el, i) {
 				for (var i = 0; i < len; i++) {
+					var regexp = new RegExp(model.textArrayNew[i], 'gi');
+					var element = el.marker.title;
+
 					console.log(el.marker.title);
 					console.log(i);
-					
-					var regexp = new RegExp(model.textArrayNew[i], 'gi');
 					console.log(regexp);
-					
-					var element = el.marker.title;
-					// console.log(element);
 
 					if (element.match(regexp)) {
 						console.log('its true ' + element);
 						return true;
 					}
-					// return true;
 				}
 			}
 			console.log(itExistsArray);
 
 			if (itExistsArray.length > 0) {
-				// view.clearMarkers(model.businessArraysObj);
-				// octopus.clearBusinessLists();
+
 				view.renderBSearchRes(itExistsArray);
 			}
 		}
@@ -387,7 +353,6 @@ var octopus = {
 			model.businessNamesArray.length = 0;
 
 			if (document.getElementById('art_gallery').checked) {
-				// var itExistsArray = businessNamesArray.filter(checkItem);
 				for (var i = 0; i < model.businessArraysObj.artArray.length; i++) {
 					var businessObj = {};
 
@@ -396,17 +361,13 @@ var octopus = {
 					businessObj.imageTag = model.flickrImagesObj.artArray[i];
 
 					model.businessNamesArray.push(businessObj);
-					// model.businessNamesArray = model.businessNamesArray.concat(model.businessArraysObj.artArray);
-					// console.log(model.businessArraysObj.artArray);
 				}
-				console.log(model.businessNamesArray);
 
 				document.getElementById('art_gallery').addEventListener('change', octopus.businessSearch);				
 				document.getElementById('museum').addEventListener('change', octopus.businessSearch);
 			}
 
 			if (document.getElementById('museum').checked) {
-				// var itExistsArray = businessNamesArray.filter(checkItem);
 				for (var i = 0; i < model.businessArraysObj.museumArray.length; i++) {
 					var businessObj = {};
 
@@ -415,10 +376,7 @@ var octopus = {
 					businessObj.imageTag = model.flickrImagesObj.museumArray[i];
 
 					model.businessNamesArray.push(businessObj);
-					// model.businessNamesArray = model.businessNamesArray.concat(model.businessArraysObj.artArray);
-					// console.log(model.businessArraysObj.artArray);
 				}
-				console.log(model.businessNamesArray);
 
 				document.getElementById('art_gallery').addEventListener('change', octopus.businessSearch);				
 				document.getElementById('museum').addEventListener('change', octopus.businessSearch);
@@ -439,8 +397,6 @@ var octopus = {
 		}
 
 		populateNamesArray(filterNamesArray);
-		// console.log(itExistsArray);
-		// view.renderBSearchRes(itExistsArray);
 	},
 	clearBusinessLists: function(e) {
 		e.preventDefault();
@@ -452,7 +408,6 @@ var octopus = {
 		document.getElementById('filtered-businesses').innerHTML = '';
 
 		allArtListItems.style.display = 'none';
-		// console.log(allArtListItems.children);
 		allMuseumListItems.style.display = 'none';		
 	},
 	userInputRegExp: function(e) {
@@ -466,9 +421,6 @@ var octopus = {
 
 		model.textArrayNew = [];
 		model.textArrayNew.length = 0;
-
-		// console.log(allArtListItems.innerHTML);
-		// console.log(allMuseumListItems.innerHTML);
 
 		// get value of input
 		var searchBoxText = document.getElementById('search-box').firstChild.firstChild.value;		
@@ -563,14 +515,13 @@ var octopus = {
 		searchBox.addEventListener('click', octopus.clearBusinessLists);
 	},
 	geoSuccess: function(pos) {
+		console.log(pos);
+
 		var initLat = pos.coords.latitude;
 		var initLng = pos.coords.longitude;
 
 		var mapObj = new octopus.Map(initLat, initLng);
 		var drawnMap = view.renderMap(mapObj.mapOptions);
-
-		// userPos is the same as the mapCenter
-		var userMarkerObj = new octopus.UserMarker(drawnMap, mapObj.mapCenter);
 		var userMarker = view.renderUserMarker(drawnMap, mapObj.mapCenter);
 
 		google.maps.event.addListener(userMarker, 'click', function() {
@@ -578,30 +529,46 @@ var octopus = {
 			model.infoWin.open(drawnMap, this);
 		});
 
-		view.clearMarkers(model.businessArraysObj);
+		view.clearMarkers();
 		view.showCheckboxes();
 		model.drawnMap = drawnMap;
 		model.mapCenter = mapObj.mapCenter;
-   		model.businessTypes.forEach(octopus.twentyBusinessMarkers);
+		console.log('inside geoSuccess');
+
+	   		model.businessTypes.forEach(octopus.setupBusinessMarkers);
 	},
 	init: function() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(octopus.geoSuccess);
 		} else {
 			console.log("Geolocation not enabled");
+
+			octopus.geoSuccess({
+				coords: {
+					latitude: 34.0611581,
+					longitude: -118.31076039999999
+				}
+			})
 		}
 
 		octopus.inputCityListener();
 		octopus.inputCheckboxListeners();
 		octopus.businessFilterListener();
 
-		view.checkCheckboxes();
+		view.uncheckCheckboxes();
 		console.log('init done');
+	},
+	renderAll: function() {
+		console.log('beginning to render everything');
+
+		// view.renderMarkerImages();
+		// view.renderArtList();
+		// view.renderMuseumList();
 	}	
 };
 
 var view = {
-	checkCheckboxes: function() {
+	uncheckCheckboxes: function() {
 		document.getElementById('art_gallery').checked = false;
 		document.getElementById('museum').checked = false;
 	},
@@ -617,60 +584,68 @@ var view = {
 			title: "You are here!"
 		});
 	},
-	renderMarker: function(map, markerPos, placeId, name) {
+	renderFlickrImages: function() {
+		model.businessArraysObj.artArray.forEach(function(value, index, array) {
+			var marker = value;
+			var name = marker.title;
+			var i = index;
+
+
+			marker.infoWin = function() {
+				var imageTag = model.flickrImagesObj.artArray[i];
+				console.log(imageTag);
+				console.log(model.flickrImagesObj.artArray[i]);
+				console.log('updating infoWin to say art2');
+				
+				model.infoWin.setContent(name + '-art2<br />' + imageTag);
+				model.infoWin.open(model.drawnMap, this);
+			};
+		});
+		model.businessArraysObj.museumArray.forEach(function(value, index, array) {
+			var marker = value;
+			var name = marker.title;
+			var i = index;
+
+
+			marker.infoWin = function() {
+				var imageTag = model.flickrImagesObj.museumArray[i];
+				console.log(imageTag);
+				console.log(model.flickrImagesObj.museumArray[i]);
+				console.log('updating infoWin to say museum2');
+				
+				model.infoWin.setContent(name + '-museum2<br />' + imageTag);
+				model.infoWin.open(model.drawnMap, this);
+			};
+		});		
+	},
+	renderMarker: function(map, lat, lng, markerPos, placeId, name, imageTag) {
 		return new google.maps.Marker({
 			map: map,
+			lat: lat,
+			lng: lng,
 			position: markerPos,
 			placeId: placeId,
-			title: name
+			title: name,
+			infoWin: function() {
+				model.infoWin.setContent(name);
+				model.infoWin.open(model.drawnMap, this);	
+			}
 		});
 	},
-	renderArtList: function(name, id, marker, imageTag) {
-		console.log(imageTag);
+	renderArtListItem: function(map, markerPos, placeId, name) {
 		var artGalleriesListUL = document.getElementById('art-galleries');
-		var artListTag = document.createElement('li');
-
-		artListTag.innerHTML = '<a id="' + id + '">' + name + '</a>';
+		var artListTag = document.createElement('li');	
+		
+		artListTag.innerHTML = '<a id="' + placeId + '">' + name + '</a>';
 		artGalleriesListUL.appendChild(artListTag);
-
-		document.getElementById(id).addEventListener('click', (function(sameName, sameMarker, sameImageTag) {
-			return function() {
-				model.infoWin.setContent(sameName + '<br />' + sameImageTag);
-				model.infoWin.open(model.drawnMap, sameMarker);	
-				console.log('i hear click 1');
-			}
-		})(name, marker, imageTag));
-
-		google.maps.event.addListener(marker, 'click', (function(sameTitle, sameImageTag) {
-			return function() {
-				model.infoWin.setContent(sameTitle + '<br/>' + sameImageTag);
-				model.infoWin.open(model.drawnMap, this);							
-			}
-		})(marker.title, imageTag));			
 	},
-	renderMuseumList: function(name, id, marker, imageTag) {
-		console.log(imageTag);
-		var museumsListUL = document.getElementById('museums');
-		var museumListTag = document.createElement('li');
-
-		museumListTag.innerHTML = '<a id="' + id + '">' + name + '</a>';
-		museumsListUL.appendChild(museumListTag);
-
-		document.getElementById(id).addEventListener('click', (function(sameName, sameMarker, sameImageTag) {
-			return function() {
-				model.infoWin.setContent(sameName + '<br />' + sameImageTag);
-				model.infoWin.open(model.drawnMap, sameMarker);		
-				console.log('i hear click 2');										
-			}
-		})(name, marker, imageTag));
-
-		google.maps.event.addListener(marker, 'click', (function(sameTitle, sameImageTag) {
-			return function() {
-				model.infoWin.setContent(sameTitle + '<br/>' + sameImageTag);
-				model.infoWin.open(model.drawnMap, this);								
-			}
-		})(marker.title, imageTag));		
-	},
+	renderMuseumListItem: function(map, markerPos, placeId, name) {
+		var museumListUL = document.getElementById('museums');
+		var museumListTag = document.createElement('li');	
+		
+		museumListTag.innerHTML = '<a id="' + placeId + '">' + name + '</a>';
+		museumListUL.appendChild(museumListTag);
+	},	
 	renderBSearchRes: function(array) {
 		console.log(array);
 
@@ -703,30 +678,53 @@ var view = {
 			})(marker.title, imageTag));			
 		}
 	},
-	clearMarkers: function(arraysObj) {
-		console.log('starting to clear');
+	showCheckboxes: function() {
+		var checkboxParent = document.getElementById('art_gallery').parentNode.parentNode;
+		
+		checkboxParent.style.display = 'inline';
+	},
+	clearMarkers: function() {
+		// console.log('starting to clear');
 
+		var businessArrays = model.businessArraysObj;
+		var flickrImageArrays = model.flickrImagesObj;
+
+		var filteredBusinessesListUL = document.getElementById('filtered-businesses');
 		var artGalleriesListUL = document.getElementById('art-galleries');
 		var museumsListUL = document.getElementById('museums');
 
+		filteredBusinessesListUL.innerHTML = '';
 		artGalleriesListUL.innerHTML = '';
 		museumsListUL.innerHTML = '';
 
-		arraysObj.artArray.forEach(function(listItem) {
+		// setMap to null to initially hide all markers
+		// businessArrays.all.forEach(function(listItem) {
+		// 	listItem.setMap(null);
+		// });
+		businessArrays.artArray.forEach(function(listItem) {
 			listItem.setMap(null);
 		});
-		arraysObj.museumArray.forEach(function(listItem) {
+		businessArrays.museumArray.forEach(function(listItem) {
 			listItem.setMap(null);
 		});
 
-		arraysObj.artArray.length = 0;
-		arraysObj.museumArray.length = 0;
-	},
-	showCheckboxes: function() {
-		console.log(model.drawnMap);
-		var checkboxParent = document.getElementById('art_gallery').parentNode.parentNode;
-		checkboxParent.style.display = 'inline';
-	}
+		// empty all business arrays and set length to 0 to begin from scratch
+		businessArrays.all = [];
+		businessArrays.artArray = [];
+		businessArrays.museumArray = [];
+
+		businessArrays.all.length = 0;
+		businessArrays.artArray.length = 0;
+		businessArrays.museumArray.length = 0;
+
+		// empty all flickr image arrays and set length to 0 to begin from scratch
+		flickrImageArrays.artArray = [];
+		flickrImageArrays.museumArray = [];
+
+		flickrImageArrays.artArray.length = 0;
+		flickrImageArrays.museumArray.length = 0;		
+
+	}	
 };
 
 octopus.init();

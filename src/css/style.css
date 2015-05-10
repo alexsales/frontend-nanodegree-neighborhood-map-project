@@ -54,7 +54,7 @@ label {
 /*-- ID Selectors --*/
 #business-list {
 	width: 22%;
-	max-height: 66%;
+	max-height: 78%;
 	position: absolute;
 	bottom: -999px;
 	z-index: 79;
@@ -67,7 +67,7 @@ label {
 	border-bottom: 1px solid #ccc;
 	// display: none;
 	font-size: 95%;
-	line-height: 175%;
+	line-height: 165%;
 	padding-top: 8px;
 }
 #business-list > ul {
@@ -79,10 +79,12 @@ label {
 #business-list > ul#art-galleries {
 	// height: 10%;
 	padding: 0 10px 0 15px;
+	display: none;
 }
 #business-list > ul#museums {
 	// height: 10%;
 	padding: 0 10px 12px 15px;
+	display: none;
 }
 #business-list p {
 	margin-left: 15px;
