@@ -54,9 +54,12 @@ label {
 /*-- ID Selectors --*/
 #business-list {
 	width: 22%;
-	max-height: 78%;
+	height: 66%;
 	position: absolute;
+
 	bottom: -999px;
+	//bottom: 11%;
+	
 	z-index: 79;
 	overflow: auto;
 	background-color: rgba(239, 244, 250, 0.75);
@@ -79,12 +82,12 @@ label {
 #business-list > ul#art-galleries {
 	// height: 10%;
 	padding: 0 10px 0 15px;
-	display: none;
+	// display: none;
 }
 #business-list > ul#museums {
 	// height: 10%;
 	padding: 0 10px 12px 15px;
-	display: none;
+	// display: none;
 }
 #business-list p {
 	margin-left: 15px;
@@ -101,7 +104,7 @@ label {
 	z-index: 99;
 }
 #city-input-form div {
-	display: none;
+	//display: none;
 }
 #city-input-form > input {
 	width: 100%;

@@ -13,25 +13,33 @@
 		<link rel="stylesheet" href="src/css/style.css">
 	</head>
 	<body>
-		<form id="city-input-form">
-			<div>
+		<form id="city-input-form" data-bind="submit: updateLatLng">
+			<div  data-bind="visible: model.showCheckboxes">
 				<label>
-					<input id="art_gallery" type="checkbox" name="business-type" value="art_gallery" /><span>art galleries</span>
+					<input id="art_gallery" type="checkbox" name="business-type" value="art_gallery" data-bind="checked: model.artCheckbox" /><span>art galleries</span>
 				</label>
 				<label>
-					<input id="museum" type="checkbox" name="business-type" value="museum" /><span>museums</span>
+					<input id="museum" type="checkbox" name="business-type" value="museum" data-bind="checked: model.museumCheckbox" /><span>museums</span>
 				</label>															
 			</div>
 			<input id="city-input" type="text" placeholder='"Los Angeles, CA" or "90032"' />
 		</form>
-		<div id="map-canvas"></div>
+		<div id="map-canvas" data-bind="visible: model.showMap"></div>
 		
 		<div id="business-list">
-			<div id="search-box"></div>
-			<p>press ENTER key when finished</p>
-			<ul id="filtered-businesses"></ul>
-			<ul id="art-galleries"></ul>
-			<ul id="museums"></ul>
+			<form id="search-box" data-bind="visible: model.showFilterInputBox, submit: normalizeSearchTerm">
+				<input type="textarea" id="filter-input" placeholder="filter businesses" />
+				<p>press ENTER key when finished</p>
+			</form>
+			<ul id="filtered-businesses" data-bind="foreach: model.filteredArray">
+				<li><a data-bind="text: $data.title, click: $root.listClickCallback"></a></li>
+			</ul>
+			<ul id="art-galleries" data-bind="foreach: model.artMarkersArray, visible: model.artCheckbox">
+				<li><a data-bind="text: $data.title, click: $root.listClickCallback"></a></li>
+			</ul>
+			<ul id="museums" data-bind="foreach:  model.museumMarkersArray, visible: model.museumCheckbox">
+				<li><a data-bind="text: $data.title, click: $root.listClickCallback"></a></li>
+			</ul>
 		</div>
 
 		<!-- bower:js -->
