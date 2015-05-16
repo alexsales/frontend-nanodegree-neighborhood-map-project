@@ -13,7 +13,7 @@
     "grunt-wiredep": "^2.0.0",
     "load-grunt-tasks": "^3.1.0"
   },
-  "description": "An app to help you look for cool things to do, locally.",
+  "description": "An app to help you look for local art galleries and museums.",
   "main": "app.js",
   "repository": {
     "type": "git",
