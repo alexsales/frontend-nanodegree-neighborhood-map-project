@@ -3,13 +3,14 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Neighborhood Map Project</title>
+		<title>Neighborhood Map Project: Art Galleries and Museums</title>
 
 		<!-- bower:css -->
 		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
 		<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
 		<!-- endbower -->		
 
+	    <link rel="stylesheet" href="src/css/map-icons.css" />
 		<link rel="stylesheet" href="src/css/style.css">
 	</head>
 	<body>
@@ -48,7 +49,9 @@
 		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<!-- endbower -->
 
-		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>
+		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+		<script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+	    <script src="src/js/map-icons.js"></script>		
 		<script src="src/js/main.js"></script>
 
 		<!-- needed for chrome's livereload extension -->

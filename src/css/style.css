@@ -39,7 +39,7 @@ input[type="checkbox"] {
 
 input:focus {
 	outline: none;
-	background: #FFC;
+	background: #FDFCD4;
 }
 
 label {
@@ -49,7 +49,41 @@ label {
 
 
 /*-- Class Selectors --*/
+.infoBox > img:first-child {
+	padding-left: 4px;
+	position: relative;
+	top: -3px;
+	left: 3px;
+}
 
+.marker-label,
+.marker-icon {
+	z-index: 99;
+	position: absolute;
+	display: block;
+	margin-top: -40px;
+	margin-left: -24px;
+	width: 50px;
+	height: 50px;
+	font-size: 24px !important;
+	text-align: center;
+	color: #FFFFFF;
+	white-space: nowrap;
+}
+
+.art-gallery {
+	font-size: 18px !important;
+	position: absolute;
+	margin-top: 1px;
+	margin-left: -9.5px;
+}
+
+.museum {
+	font-size: 18px !important;
+	position: absolute;
+	margin-top: 1px;
+	margin-left: -9.5px;
+}
 
 /*-- ID Selectors --*/
 #business-list {
@@ -62,7 +96,7 @@ label {
 	
 	z-index: 79;
 	overflow: auto;
-	background-color: rgba(239, 244, 250, 0.75);
+	background-color: rgba(239, 244, 250, 0.85);
 	color: #0738B6;
 	left: 5%;
 	border-right: 1px solid #ccc;
@@ -108,9 +142,12 @@ label {
 }
 #city-input-form > input {
 	width: 100%;
+	height: 27px;
 	color: #366;
 	padding-left: 5px;
 	margin-bottom: 3px;
+	font-size: 95%;
+	border: 1px solid #ccc;
 }
 #search-box input {
 	width: 94%;
@@ -118,4 +155,10 @@ label {
 	overflow: hidden;
 	margin-top: 1px;
 	margin-bottom: 2px;	
+}
+#walking {
+	position: relative;
+	left: -28px;
+	font-size: 18px;
+	color: #0E77E9;
 }
