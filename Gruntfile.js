@@ -12,6 +12,19 @@ module.exports = function(grunt) {
 				cssDest: 'src/css/_bower.css'
 			}
 		},
+		uglify: {
+			options: {
+				compress: {
+					drop_console: true
+				},
+				preserveComments: false
+			},
+			my_target: {
+				files: {
+					'src/js/infobox-icon-main.min.js': ['src/js/infobox.js', 'src/js/map-icons-ie7.js', 'src/js/map-icons.js', 'src/js/main.js']
+				}
+			}
+		},
 		watch: {
 			all: {
 				files: ['./*.html', './src/**/*.css', './src/**/*.js'],
@@ -28,5 +41,5 @@ module.exports = function(grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['wiredep', 'bower_concat', 'watch']);
+	grunt.registerTask('default', ['wiredep', 'bower_concat', 'uglify', 'watch']);
 };

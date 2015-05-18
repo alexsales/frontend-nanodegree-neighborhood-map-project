@@ -5,10 +5,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Neighborhood Map Project: Art Galleries and Museums</title>
 
+		<!-- For Production: Comment or remove these CSS files BELOW. -->
 		<!-- bower:css -->
 		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
 		<link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
 		<!-- endbower -->		
+		<!-- For Production: Comment or remove these CSS files ABOVE. -->
 
 		<link rel="stylesheet" href="src/css/_bower.css" />
 	    <link rel="stylesheet" href="src/css/map-icons.css" />
@@ -44,17 +46,24 @@
 			</ul>
 		</div>
 
+		<!-- For Production: Comment or remove these script tags BELOW. -->
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="bower_components/knockoutjs/dist/knockout.js"></script>
 		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<!-- endbower -->
 
-		<script src="src/js/_bower.js"></script>
 		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 		<script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
 	    <script src="src/js/map-icons.js"></script>		
 		<script src="src/js/main.js"></script>
+		<!-- For Production: Comment or remove these script tags ABOVE. -->		
+
+		<!-- For Production: UNCOMMENT these script tags:
+		<script src="src/js/_bower.js"></script>
+		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+		<script src="src/js/infobox-icons-main.min.js"></script>
+		-->
 
 		<!-- needed for chrome's livereload extension -->
 		<script src="//localhost:35729/livereload.js"></script>
