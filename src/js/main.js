@@ -83,7 +83,7 @@ var helperFunctions = {
                 var latLng = new google.maps.LatLng(lat, lng);
                 var placeId = data[i].place_id;
                 var title = data[i].name;
-                var address = data[i].vicinity;             
+                var address = data[i].vicinity;
                 var placeUrlEncodedName = encodeURIComponent(title);
                 var photoSrcUrl = '';
                 var marker = new Marker({
@@ -109,7 +109,7 @@ var helperFunctions = {
                 });
 
                 model.museumMarkersArray.push(marker);
-                model.photoIdsArray.push(placeId);              
+                model.photoIdsArray.push(placeId);
             }
             console.log(model.museumMarkersArray());
             helperFunctions.addMuseumMarkerListener(model.museumMarkersArray());
@@ -199,20 +199,26 @@ var helperFunctions = {
                 console.log(marker);
                 console.log(arr);
 
-                arr()[i].infoBox = (function(samePhotoImageTag) {
+                marker.infoBox = (function(samePhotoImageTag) {
                     return function() {
                         model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span><br />' + samePhotoImageTag);
-                        model.infoBox.open(model.drawnMap(), this);                     
+                        model.infoBox.open(model.drawnMap(), this);
                     };
                 })(photoImageTag);
 
             } else {
-                arr()[i].infoBox = function() {
+                marker.infoBox = function() {
                     model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span>');
                     model.infoBox.open(model.drawnMap(), this);
                 };
             }
-        });     
+        })
+        .fail(function() {
+            marker.infoBox = function() {
+                model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span>');
+                model.infoBox.open(model.drawnMap(), this);
+            };
+        });
     },
 
     // a function to filter out common/insignificant words within a string;
@@ -314,7 +320,7 @@ var mapViewModel = {
                     model.lng(model.position().coords.longitude);
                 };
 
-                helperFunctions.clearMarkers();             
+                helperFunctions.clearMarkers();
 
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(success);
@@ -436,10 +442,10 @@ var mapViewModel = {
             document.getElementById('business-list').style.bottom = '11%';
         } else if (!model.artCheckbox() && !model.museumCheckbox()) {
             model.showFilterInputBox(false);
-            document.getElementById('business-list').style.bottom = '-999px';           
+            document.getElementById('business-list').style.bottom = '-999px';
         } else {
             model.showFilterInputBox(true);
-            document.getElementById('business-list').style.bottom = '11%';          
+            document.getElementById('business-list').style.bottom = '11%';
         }
     }),
 
@@ -477,7 +483,7 @@ var mapViewModel = {
                 artGalleriesListUL.style.display = 'block';
             }
             if (model.museumCheckbox()) {
-                museumsListUL.style.display = 'block';              
+                museumsListUL.style.display = 'block';
             }
 
             model.artMarkersArray().forEach(function(markerItem) {
@@ -485,7 +491,7 @@ var mapViewModel = {
             });
             model.museumMarkersArray().forEach(function(markerItem) {
                 markerItem.setMap(model.drawnMap());
-            });         
+            });
 
             return false;
         } else {
@@ -574,7 +580,7 @@ var mapViewModel = {
         model.museumMarkersArray().forEach(function(marker, index, array) {
             var marker = marker;
             var name = marker.title;
-            var address = marker.address;           
+            var address = marker.address;
             var lat = marker.position.lat();
             var lng = marker.position.lng();
             var arr = model.museumMarkersArray;
