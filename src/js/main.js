@@ -439,13 +439,13 @@ var mapViewModel = {
     updateShowFilterInput: ko.computed(function() {
         if (model.artCheckbox() || model.museumCheckbox()) {
             model.showFilterInputBox(true);
-            document.getElementById('business-list').style.bottom = '11%';
+            document.getElementById('business-list').style.bottom = '5%';
         } else if (!model.artCheckbox() && !model.museumCheckbox()) {
             model.showFilterInputBox(false);
             document.getElementById('business-list').style.bottom = '-999px';
         } else {
             model.showFilterInputBox(true);
-            document.getElementById('business-list').style.bottom = '11%';
+            document.getElementById('business-list').style.bottom = '5%';
         }
     }),
 
@@ -481,17 +481,19 @@ var mapViewModel = {
 
             if (model.artCheckbox()) {
                 artGalleriesListUL.style.display = 'block';
+                model.artMarkersArray().forEach(function(markerItem) {
+                    markerItem.setMap(model.drawnMap());
+                });                
             }
             if (model.museumCheckbox()) {
                 museumsListUL.style.display = 'block';
+                model.museumMarkersArray().forEach(function(markerItem) {
+                    markerItem.setMap(model.drawnMap());
+                });
             }
 
-            model.artMarkersArray().forEach(function(markerItem) {
-                markerItem.setMap(model.drawnMap());
-            });
-            model.museumMarkersArray().forEach(function(markerItem) {
-                markerItem.setMap(model.drawnMap());
-            });
+
+
 
             return false;
         } else {
