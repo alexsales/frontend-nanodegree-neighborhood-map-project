@@ -98,7 +98,7 @@ label {
 	z-index: 79;
 	overflow: auto;
 	background-color: rgba(239, 244, 250, 0.85);
-	color: #0738B6;
+	color: #0738b6;
 	left: 5%;
 	border-right: 1px solid #ccc;
 	border-left: 1px solid #ccc;
@@ -160,7 +160,7 @@ label {
 	position: relative;
 	left: -28px;
 	font-size: 18px;
-	color: #0E77E9;
+	color: #0e77e9;
 }
 
 /*-- Media Queries --*/
@@ -197,7 +197,7 @@ label {
 		z-index: 79;
 		overflow: auto;
 		background-color: rgba(239, 244, 250, 0.85);
-		color: #0738B6;
+		color: #0738b6;
 		left: 3%;
 		right: 3%;
 		border-right: 1px solid #ccc;
@@ -287,7 +287,7 @@ label {
 		z-index: 79;
 		overflow: auto;
 		background-color: rgba(239, 244, 250, 0.85);
-		color: #0738B6;
+		color: #0738b6;
 		left: 3%;
 		right: 3%;
 		border-right: 1px solid #ccc;
@@ -377,7 +377,7 @@ label {
 		z-index: 79;
 		overflow: auto;
 		background-color: rgba(239, 244, 250, 0.85);
-		color: #0738B6;
+		color: #0738b6;
 		left: 3%;
 		right: 3%;
 		border-right: 1px solid #ccc;
