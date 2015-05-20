@@ -5,6 +5,21 @@ Summary:
 
 An app to help you identify local art galleries and museums.
 
+====================================================
+
+To Run the Application (for further development/non-production):
+
+1. Clone repo into your local workstation:
+	git clone https://github.com/alexsales/frontend-nanodegree-neighborhood-map-project.git
+
+2. Setup a local server on your workstation. For Windows users, checkout WAMP. For Mac (and possibly Linux) users, open a Terminal window and cd into your cloned directory. Then type the following command to create a temporary Python server:
+	python -m SimpleHTTPServer 8080
+
+3. Open a browser a window and in the address box (or URL bar), navigate to:
+	localhost:8080
+
+====================================================
+
 Tools / Techniques:
 
 * Knockout.js (a MVVM framework)
@@ -20,6 +35,7 @@ Tools / Techniques:
 * InfoBox Library (an external library)
 * jQuery (an external library)
 * Self-Documenting Code
+* Media Queries and Responsive Web Design
 
 ====================================================
 
