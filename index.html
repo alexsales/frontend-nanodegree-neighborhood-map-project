@@ -13,13 +13,34 @@
 		<!-- For Production: Comment or remove these CSS files ABOVE. -->
 
 		<link rel="stylesheet" href="src/css/offline-theme-dark.css" />
+		<link rel="stylesheet" href="src/css/offline-theme-dark-indicator.css" />
 		<link rel="stylesheet" href="src/css/offline-language-english.css" />		
 		<link rel="stylesheet" href="src/css/offline-language-english-indicator.css" />
 		<link rel="stylesheet" href="src/css/_bower.css" />
 	    <link rel="stylesheet" href="src/css/map-icons.css" />
 		<link rel="stylesheet" href="src/css/style.css">
 
+		<script src="src/js/jquery.js"></script>
 		<script src="src/js/offline.min.js"></script>
+		<script>
+			$(function() {
+			    var $online = $('.online');
+			    var $offline = $('.offline');
+
+			    Offline.on('confirmed-down', function() {
+			        $online.fadeOut(function() {
+			            $offline.fadeIn();
+			            console.log('confirmed down');
+			        });
+			    });
+			    Offline.on('confirmed-up', function() {
+			        $offline.fadeOut(function() {
+			            $online.fadeIn();
+			            console.log('confirmed up');
+			        });
+			    });
+			});
+		</script>		
 	</head>
 	<body>
 		<form class="online" id="city-input-form" data-bind="submit: updateLatLng">
@@ -55,7 +76,6 @@
 
 		<!-- For Production: Comment or remove these script tags BELOW. -->
 		<!-- bower:js -->
-		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="bower_components/knockoutjs/dist/knockout.js"></script>
 		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<!-- endbower -->
@@ -71,41 +91,6 @@
 		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 		<script src="src/js/infobox-icons-main.min.js"></script>
 		-->
-
-		<script>
-			var run = function() {
-			    if (Offline.state === 'up') {
-			        console.log('Offline says internet is up');
-			        Offline.check();
-			    }
-			    if (Offline.state === 'down') {
-			        console.log('Offline says internet is down');
-			        Offline.check();
-			    }
-			};
-
-			// $(function() {
-
-			//     var $online = $('.online');
-			//     var $offline = $('.offline');
-
-			//     Offline.on('confirmed-down', function() {
-			//         $online.fadeOut(function() {
-			//             $offline.fadeIn();
-			//             console.log('confirmed down');
-			//         });
-			//     });
-
-			//     Offline.on('confirmed-up', function() {
-			//         $offline.fadeOut(function() {
-			//             $online.fadeIn();
-			//             console.log('confirmed up');
-			//         });
-			//     });
-			// });
-
-			setInterval(run, 3000);
-		</script>
 		
 		<!-- needed for chrome's livereload extension -->
 		<script src="//localhost:35729/livereload.js"></script>
