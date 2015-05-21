@@ -19,11 +19,13 @@
 }
 /* line 16, ../sass/_offline-theme-base-indicator.sass */
 .offline-ui.offline-ui-up {
-  display: block;
+  display: none;
+  height: 10%;
 }
 /* line 19, ../sass/_offline-theme-base-indicator.sass */
 .offline-ui.offline-ui-down {
   display: block;
+  height: 10%;
 }
 
 /* line 8, ../sass/offline-theme-dark-indicator.sass */

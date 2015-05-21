@@ -53,14 +53,6 @@ label {
 
 /*-- Class Selectors --*/
 
-.offline {
-	position: absolute;
-	top: 10%;
-	left: 5%;
-	border: 1px solid #ccc;
-	padding: 15px;
-}
-
 .infoBox > img:first-child {
 	padding-left: 4px;
 	position: relative;
