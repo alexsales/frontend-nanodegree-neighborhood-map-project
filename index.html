@@ -21,26 +21,7 @@
 		<link rel="stylesheet" href="src/css/style.css">
 
 		<script src="src/js/jquery.js"></script>
-		<script src="src/js/offline.min.js"></script>
-		<script>
-			$(function() {
-			    var $online = $('.online');
-			    var $offline = $('.offline');
-
-			    Offline.on('confirmed-down', function() {
-			        $online.fadeOut(function() {
-			            $offline.fadeIn();
-			            console.log('confirmed down');
-			        });
-			    });
-			    Offline.on('confirmed-up', function() {
-			        $offline.fadeOut(function() {
-			            $online.fadeIn();
-			            console.log('confirmed up');
-			        });
-			    });
-			});
-		</script>		
+		<script src="src/js/offline.min.js"></script>	
 	</head>
 	<body>
 		<form class="online" id="city-input-form" data-bind="submit: updateLatLng">
@@ -55,7 +36,7 @@
 			<input id="city-input" type="text" placeholder='"Los Angeles, CA" or "90032"' />
 		</form>
 		<div id="map-canvas" data-bind="visible: model.showMap"></div>
-		<div id="business-list">
+		<div class="online" id="business-list">
 			<form id="search-box" data-bind="visible: model.showFilterInputBox, submit: normalizeSearchTerm">
 				<input type="textarea" id="filter-input" placeholder="filter businesses" />
 				<p>press ENTER key when finished</p>
