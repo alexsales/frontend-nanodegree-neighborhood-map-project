@@ -194,10 +194,10 @@ var helperFunctions = {
                 var photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
                 var photoImageTag = '<img id="' + cssId + '" width="320" src="' + photoSrcUrl + '" />';
 
-                console.log(i);
-                console.log(photoImageTag);
-                console.log(marker);
-                console.log(arr);
+                // console.log(i);
+                // console.log(photoImageTag);
+                // console.log(marker);
+                // console.log(arr);
 
                 marker.infoBox = (function(samePhotoImageTag) {
                     return function() {
