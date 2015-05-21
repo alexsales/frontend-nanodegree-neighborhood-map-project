@@ -64,17 +64,29 @@
 		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<!-- endbower -->
 
+		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+		<script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+	    <script src="src/js/map-icons.js"></script>		
+		<script src="src/js/main.js"></script>
+		<!-- For Production: Comment or remove these script tags ABOVE. -->		
+
+		<!-- For Production: UNCOMMENT these script tags:
+		<script src="src/js/_bower.js"></script>
+		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+		<script src="src/js/infobox-icons-main.min.js"></script>
+		-->
+
 		<script>
-			var run = function() {
-			    if (Offline.state === 'up') {
-			        console.log('Offline says internet is up');
-			        Offline.check();
-			    }
-			    if (Offline.state === 'down') {
-			        console.log('Offline says internet is down');
-			        Offline.check();
-			    }
-			};
+			// var run = function() {
+			//     if (Offline.state === 'up') {
+			//         console.log('Offline says internet is up');
+			//         Offline.check();
+			//     }
+			//     if (Offline.state === 'down') {
+			//         console.log('Offline says internet is down');
+			//         Offline.check();
+			//     }
+			// };
 
 			$(function() {
 
@@ -96,21 +108,9 @@
 			    });
 			});
 
-			setInterval(run, 3000);
+			// setInterval(run, 3000);
 		</script>
 		
-		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
-		<script src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
-	    <script src="src/js/map-icons.js"></script>		
-		<script src="src/js/main.js"></script>
-		<!-- For Production: Comment or remove these script tags ABOVE. -->		
-
-		<!-- For Production: UNCOMMENT these script tags:
-		<script src="src/js/_bower.js"></script>
-		<script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
-		<script src="src/js/infobox-icons-main.min.js"></script>
-		-->
-
 		<!-- needed for chrome's livereload extension -->
 		<script src="//localhost:35729/livereload.js"></script>
 	</body>
