@@ -20,12 +20,8 @@
 		<link rel="stylesheet" href="src/css/style.css">
 
 		<script src="src/js/offline.min.js"></script>
-		<script src="src/js/offline-simulate-ui.min.js"></script>		
 	</head>
 	<body>
-		<div class="offline-simulate-ui">
-			<input type="checkbox" id="offline-simulate-check" title="Simulate online/offline states">
-		</div>	
 		<form class="online" id="city-input-form" data-bind="submit: updateLatLng">
 			<div  data-bind="visible: model.showCheckboxes">
 				<label>
@@ -77,38 +73,38 @@
 		-->
 
 		<script>
-			// var run = function() {
-			//     if (Offline.state === 'up') {
-			//         console.log('Offline says internet is up');
-			//         Offline.check();
-			//     }
-			//     if (Offline.state === 'down') {
-			//         console.log('Offline says internet is down');
-			//         Offline.check();
-			//     }
-			// };
+			var run = function() {
+			    if (Offline.state === 'up') {
+			        console.log('Offline says internet is up');
+			        Offline.check();
+			    }
+			    if (Offline.state === 'down') {
+			        console.log('Offline says internet is down');
+			        Offline.check();
+			    }
+			};
 
-			$(function() {
+			// $(function() {
 
-			    var $online = $('.online');
-			    var $offline = $('.offline');
+			//     var $online = $('.online');
+			//     var $offline = $('.offline');
 
-			    Offline.on('confirmed-down', function() {
-			        $online.fadeOut(function() {
-			            $offline.fadeIn();
-			            console.log('confirmed down');
-			        });
-			    });
+			//     Offline.on('confirmed-down', function() {
+			//         $online.fadeOut(function() {
+			//             $offline.fadeIn();
+			//             console.log('confirmed down');
+			//         });
+			//     });
 
-			    Offline.on('confirmed-up', function() {
-			        $offline.fadeOut(function() {
-			            $online.fadeIn();
-			            console.log('confirmed up');
-			        });
-			    });
-			});
+			//     Offline.on('confirmed-up', function() {
+			//         $offline.fadeOut(function() {
+			//             $online.fadeIn();
+			//             console.log('confirmed up');
+			//         });
+			//     });
+			// });
 
-			// setInterval(run, 3000);
+			setInterval(run, 3000);
 		</script>
 		
 		<!-- needed for chrome's livereload extension -->
