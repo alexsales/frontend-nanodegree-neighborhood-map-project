@@ -31,7 +31,7 @@ var helperFunctions = {
 
     fillArtMarkersArray: function(data, status) {
         var len = data.length;
-        console.log(data);
+        // console.log(data);
 
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < len; i++) {
@@ -68,13 +68,13 @@ var helperFunctions = {
                 model.artMarkersArray.push(marker);
                 model.photoIdsArray.push(placeId);
             }
-            console.log(model.artMarkersArray());
+            // console.log(model.artMarkersArray());
             helperFunctions.addArtMarkerListener(model.artMarkersArray());
         }
     },
     fillMuseumMarkersArray: function(data, status) {
         var len = data.length;
-        console.log(data);
+        // console.log(data);
 
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < len; i++) {
@@ -111,7 +111,7 @@ var helperFunctions = {
                 model.museumMarkersArray.push(marker);
                 model.photoIdsArray.push(placeId);
             }
-            console.log(model.museumMarkersArray());
+            // console.log(model.museumMarkersArray());
             helperFunctions.addMuseumMarkerListener(model.museumMarkersArray());
         }
     },
@@ -294,7 +294,7 @@ var mapViewModel = {
 
     updateLatLng: function() {
         var city = document.getElementById('city-input').value;
-        console.log(city);
+        // console.log(city);
 
         var cityToArray = city.split(' ');
         var cityToString = cityToArray.join('+');
@@ -307,7 +307,7 @@ var mapViewModel = {
             // if a city is not found to match, then attempt to draw the user's current position using the browser's geolocation feature;
 
             if (data.status != 'ZERO_RESULTS' && city != '') {
-                console.log(data);
+                // console.log(data);
         
                 helperFunctions.clearMarkers();
 
@@ -476,8 +476,8 @@ var mapViewModel = {
             museumCheckboxInput.disabled = false;
             
             document.getElementById('filtered-businesses').innerHTML = '';
-            console.log(model.filteredArray());
-            console.log(model.searchTermsArray());
+            // console.log(model.filteredArray());
+            // console.log(model.searchTermsArray());
 
             if (model.artCheckbox()) {
                 artGalleriesListUL.style.display = 'block';
@@ -573,7 +573,7 @@ var mapViewModel = {
             var arr = model.artMarkersArray;
             var i = index;
 
-            console.log(arr);
+            // console.log(arr);
 
             (function(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI) {
                 return helperFunctions.addFlickrImages(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI);
@@ -588,7 +588,7 @@ var mapViewModel = {
             var arr = model.museumMarkersArray;
             var i = index;
 
-            console.log(arr);
+            // console.log(arr);
 
             (function(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI) {
                 return helperFunctions.addFlickrImages(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI);

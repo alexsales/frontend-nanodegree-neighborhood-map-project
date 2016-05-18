@@ -21,16 +21,13 @@ module.exports = function(grunt) {
 			},
 			my_target: {
 				files: {
-					'src/js/infobox-icon-main.min.js': ['src/js/infobox.js', 'src/js/map-icons-ie7.js', 'src/js/map-icons.js', 'src/js/main.js']
+					'src/js/_infobox-icons-main.min.js': ['src/js/infobox.js', 'src/js/map-icons-ie7.js', 'src/js/map-icons.js', 'src/js/main.js']
 				}
 			}
 		},
 		watch: {
 			all: {
 				files: ['./*.html', './src/**/*.css', './src/**/*.js'],
-				options: {
-					livereload: true
-				}
 			}
 		}
 	});
