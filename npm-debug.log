@@ -1,0 +1,182 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'bower' ]
+2 info using npm@2.15.1
+3 info using node@v4.4.4
+4 verbose install initial load of /usr/local/lib/package.json
+5 verbose readDependencies loading dependencies from /usr/local/lib/package.json
+6 silly cache add args [ 'bower', null ]
+7 verbose cache add spec bower
+8 silly cache add parsed spec Result {
+8 silly cache add   raw: 'bower',
+8 silly cache add   scope: null,
+8 silly cache add   name: 'bower',
+8 silly cache add   rawSpec: '',
+8 silly cache add   spec: 'latest',
+8 silly cache add   type: 'tag' }
+9 silly addNamed bower@latest
+10 verbose addNamed "latest" is being treated as a dist-tag for bower
+11 info addNameTag [ 'bower', 'latest' ]
+12 silly mapToRegistry name bower
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry data Result {
+15 silly mapToRegistry   raw: 'bower',
+15 silly mapToRegistry   scope: null,
+15 silly mapToRegistry   name: 'bower',
+15 silly mapToRegistry   rawSpec: '',
+15 silly mapToRegistry   spec: 'latest',
+15 silly mapToRegistry   type: 'tag' }
+16 silly mapToRegistry uri https://registry.npmjs.org/bower
+17 verbose addNameTag registry:https://registry.npmjs.org/bower not in flight; fetching
+18 verbose request uri https://registry.npmjs.org/bower
+19 verbose request no auth needed
+20 info attempt registry request try #1 at 2:05:05 AM
+21 verbose request id 925301ae1138f638
+22 verbose etag "F4YFCT8HJ5IZYGA0W5GRK803M"
+23 http request GET https://registry.npmjs.org/bower
+24 http 200 https://registry.npmjs.org/bower
+25 verbose headers { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+25 verbose headers   etag: '"A1PFTEF2Q5CACHGGUZULT3PNF"',
+25 verbose headers   'content-type': 'application/json',
+25 verbose headers   'content-encoding': 'gzip',
+25 verbose headers   'cache-control': 'max-age=300',
+25 verbose headers   'content-length': '20434',
+25 verbose headers   'accept-ranges': 'bytes',
+25 verbose headers   date: 'Wed, 18 May 2016 09:05:06 GMT',
+25 verbose headers   via: '1.1 varnish',
+25 verbose headers   age: '6',
+25 verbose headers   connection: 'keep-alive',
+25 verbose headers   'x-served-by': 'cache-dfw1847-DFW',
+25 verbose headers   'x-cache': 'HIT',
+25 verbose headers   'x-cache-hits': '1',
+25 verbose headers   'x-timer': 'S1463562306.113614,VS0,VE0',
+25 verbose headers   vary: 'Accept-Encoding' }
+26 silly get cb [ 200,
+26 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly get     etag: '"A1PFTEF2Q5CACHGGUZULT3PNF"',
+26 silly get     'content-type': 'application/json',
+26 silly get     'content-encoding': 'gzip',
+26 silly get     'cache-control': 'max-age=300',
+26 silly get     'content-length': '20434',
+26 silly get     'accept-ranges': 'bytes',
+26 silly get     date: 'Wed, 18 May 2016 09:05:06 GMT',
+26 silly get     via: '1.1 varnish',
+26 silly get     age: '6',
+26 silly get     connection: 'keep-alive',
+26 silly get     'x-served-by': 'cache-dfw1847-DFW',
+26 silly get     'x-cache': 'HIT',
+26 silly get     'x-cache-hits': '1',
+26 silly get     'x-timer': 'S1463562306.113614,VS0,VE0',
+26 silly get     vary: 'Accept-Encoding' } ]
+27 verbose get saving bower to /Users/Alex/.npm/registry.npmjs.org/bower/.cache.json
+28 verbose correctMkdir /Users/Alex/.npm correctMkdir not in flight; initializing
+29 silly addNameTag next cb for bower with tag latest
+30 silly addNamed bower@1.7.9
+31 verbose addNamed "1.7.9" is a plain semver version for bower
+32 silly cache afterAdd bower@1.7.9
+33 verbose afterAdd /Users/Alex/.npm/bower/1.7.9/package/package.json not in flight; writing
+34 verbose correctMkdir /Users/Alex/.npm correctMkdir not in flight; initializing
+35 verbose afterAdd /Users/Alex/.npm/bower/1.7.9/package/package.json written
+36 silly install resolved [ { name: 'bower',
+36 silly install resolved     version: '1.7.9',
+36 silly install resolved     description: 'The browser package manager',
+36 silly install resolved     author: { name: 'Twitter' },
+36 silly install resolved     license: 'MIT',
+36 silly install resolved     repository: { type: 'git', url: 'git+https://github.com/bower/bower.git' },
+36 silly install resolved     main: 'lib',
+36 silly install resolved     bin: { bower: 'bin/bower' },
+36 silly install resolved     homepage: 'http://bower.io',
+36 silly install resolved     engines: { node: '>=0.10.0' },
+36 silly install resolved     keywords: [ 'bower' ],
+36 silly install resolved     files: [ 'bin', 'lib' ],
+36 silly install resolved     bugs: { url: 'https://github.com/bower/bower/issues' },
+36 silly install resolved     _id: 'bower@1.7.9',
+36 silly install resolved     scripts: {},
+36 silly install resolved     _shasum: 'b7296c2393e0d75edaa6ca39648132dd255812b0',
+36 silly install resolved     _from: 'bower@latest',
+36 silly install resolved     _npmVersion: '3.7.3',
+36 silly install resolved     _nodeVersion: '5.9.0',
+36 silly install resolved     _npmUser: { name: 'sheerun', email: 'sheerun@sher.pl' },
+36 silly install resolved     dist:
+36 silly install resolved      { shasum: 'b7296c2393e0d75edaa6ca39648132dd255812b0',
+36 silly install resolved        tarball: 'https://registry.npmjs.org/bower/-/bower-1.7.9.tgz' },
+36 silly install resolved     maintainers:
+36 silly install resolved      [ [Object],
+36 silly install resolved        [Object],
+36 silly install resolved        [Object],
+36 silly install resolved        [Object],
+36 silly install resolved        [Object],
+36 silly install resolved        [Object],
+36 silly install resolved        [Object] ],
+36 silly install resolved     _npmOperationalInternal:
+36 silly install resolved      { host: 'packages-12-west.internal.npmjs.com',
+36 silly install resolved        tmp: 'tmp/bower-1.7.9.tgz_1459857239351_0.9720134933013469' },
+36 silly install resolved     directories: {},
+36 silly install resolved     _resolved: 'https://registry.npmjs.org/bower/-/bower-1.7.9.tgz',
+36 silly install resolved     readme: 'ERROR: No README data found!' } ]
+37 info install bower@1.7.9 into /usr/local/lib
+38 info installOne bower@1.7.9
+39 verbose installOne of bower to /usr/local/lib not in flight; installing
+40 verbose correctMkdir /Users/Alex/.npm/_locks correctMkdir not in flight; initializing
+41 verbose lock using /Users/Alex/.npm/_locks/bower-e8debc5417026b57.lock for /usr/local/lib/node_modules/bower
+42 silly install write writing bower 1.7.9 to /usr/local/lib/node_modules/bower
+43 verbose unbuild lib/node_modules/bower
+44 info preuninstall bower@1.7.7
+45 info uninstall bower@1.7.7
+46 verbose unbuild rmStuff bower@1.7.7 from /usr/local/lib/node_modules
+47 silly gentlyRm /usr/local/bin/bower is being gently removed
+48 silly gentlyRm verifying /usr/local is an npm working directory
+49 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+50 silly gentlyRm deletion target /usr/local/bin/bower is under /usr/local
+51 verbose gentlyRm vacuuming from /usr/local/bin/bower up to /usr/local
+52 silly vacuum-fs removing /usr/local/bin/bower
+53 silly vacuum-fs quitting because other entries in /usr/local/bin
+54 info postuninstall bower@1.7.7
+55 silly gentlyRm /usr/local/lib/node_modules/bower is being purged from base /usr/local
+56 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/bower
+57 silly vacuum-fs purging /usr/local/lib/node_modules/bower
+58 verbose unlock done using /Users/Alex/.npm/_locks/bower-e8debc5417026b57.lock for /usr/local/lib/node_modules/bower
+59 verbose stack Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/bower'
+59 verbose stack     at Error (native)
+60 verbose cwd /Users/Alex/Sites/2015-Udacity/05 - Neighborhood Map Project/project-site
+61 error Darwin 15.4.0
+62 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "bower"
+63 error node v4.4.4
+64 error npm  v2.15.1
+65 error path /usr/local/lib/node_modules/bower
+66 error code EACCES
+67 error errno -13
+68 error syscall rmdir
+69 error Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/bower'
+69 error     at Error (native)
+69 error  { [Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/bower']
+69 error   errno: -13,
+69 error   code: 'EACCES',
+69 error   syscall: 'rmdir',
+69 error   path: '/usr/local/lib/node_modules/bower' }
+70 error Please try running this command again as root/Administrator.
+71 verbose exit [ -13, true ]
+72 verbose unbuild lib/node_modules/bower
+73 info preuninstall bower@1.7.7
+74 info uninstall bower@1.7.7
+75 verbose unbuild rmStuff bower@1.7.7 from /usr/local/lib/node_modules
+76 silly gentlyRm /usr/local/bin/bower is being gently removed
+77 silly gentlyRm verifying /usr/local is an npm working directory
+78 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+79 silly gentlyRm deletion target /usr/local/bin/bower is under /usr/local
+80 verbose gentlyRm vacuuming from /usr/local/bin/bower up to /usr/local
+81 info postuninstall bower@1.7.7
+82 silly gentlyRm /usr/local/lib/node_modules/bower is being purged from base /usr/local
+83 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/bower
+84 silly vacuum-fs purging /usr/local/lib/node_modules/bower
+85 error error rolling back Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/bower'
+85 error error rolling back     at Error (native)
+85 error error rolling back  { [Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/bower']
+85 error error rolling back   errno: -13,
+85 error error rolling back   code: 'EACCES',
+85 error error rolling back   syscall: 'rmdir',
+85 error error rolling back   path: '/usr/local/lib/node_modules/bower' }
