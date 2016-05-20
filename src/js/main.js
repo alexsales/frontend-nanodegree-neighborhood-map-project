@@ -21,7 +21,7 @@ var model = {
 };
 
 var helperFunctions = {
-    
+
     // fill model.artMarkersArray;
     // create new Marker object containing map, position, address, title, placeId, label properties using data passed into the function;
     // instead of using Google's built-in object Marker constructor and new maps.google.Marker, use Map Icons' Marker library and new Marker();
@@ -31,7 +31,6 @@ var helperFunctions = {
 
     fillArtMarkersArray: function(data, status) {
         var len = data.length;
-        // console.log(data);
 
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < len; i++) {
@@ -68,13 +67,11 @@ var helperFunctions = {
                 model.artMarkersArray.push(marker);
                 model.photoIdsArray.push(placeId);
             }
-            // console.log(model.artMarkersArray());
             helperFunctions.addArtMarkerListener(model.artMarkersArray());
         }
     },
     fillMuseumMarkersArray: function(data, status) {
         var len = data.length;
-        // console.log(data);
 
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < len; i++) {
@@ -111,7 +108,6 @@ var helperFunctions = {
                 model.museumMarkersArray.push(marker);
                 model.photoIdsArray.push(placeId);
             }
-            // console.log(model.museumMarkersArray());
             helperFunctions.addMuseumMarkerListener(model.museumMarkersArray());
         }
     },
@@ -156,19 +152,16 @@ var helperFunctions = {
                 markerItem.setMap(null);
             });
         }
-
         if (!model.museumCheckbox()) {
             model.museumMarkersArray().forEach(function(markerItem) {
                 markerItem.setMap(null);
             });
         }
-
         if (model.artCheckbox()) {
             model.artMarkersArray().forEach(function(markerItem) {
                 markerItem.setMap(model.drawnMap());
             });
         }
-
         if (model.museumCheckbox()) {
             model.museumMarkersArray().forEach(function(markerItem) {
                 markerItem.setMap(model.drawnMap());
@@ -183,42 +176,37 @@ var helperFunctions = {
         apiResponse = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=4c1c3a64fcef86837a9839120dcd9da9&text=' + name + '&content_type=1&accuracy=13&tag_mode=all&min_upload_date=2014&media=photos&lat=' + lat + '&lon=' + lng + '&format=json&nojsoncallback=1';
 
         $.getJSON(apiResponse, function(data) {
-            if (data.photos.total > 1) {
-                var photoArrayItem = data.photos.photo[1];
-                var farmId = photoArrayItem.farm;
-                var serverId = photoArrayItem.server;
-                var photoId = photoArrayItem.id;
-                var secret = photoArrayItem.secret;
-                var cssId = marker.placeId;
+                if (data.photos.total > 1) {
+                    var photoArrayItem = data.photos.photo[1];
+                    var farmId = photoArrayItem.farm;
+                    var serverId = photoArrayItem.server;
+                    var photoId = photoArrayItem.id;
+                    var secret = photoArrayItem.secret;
+                    var cssId = marker.placeId;
 
-                var photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
-                var photoImageTag = '<img id="' + cssId + '" width="320" src="' + photoSrcUrl + '" />';
+                    var photoSrcUrl = 'https://farm' + farmId + '.staticflickr.com/' + serverId + '/' + photoId + '_' + secret + '_n.jpg';
+                    var photoImageTag = '<img id="' + cssId + '" width="320" src="' + photoSrcUrl + '" />';
 
-                // console.log(i);
-                // console.log(photoImageTag);
-                // console.log(marker);
-                // console.log(arr);
+                    marker.infoBox = (function(samePhotoImageTag) {
+                        return function() {
+                            model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span><br />' + samePhotoImageTag);
+                            model.infoBox.open(model.drawnMap(), this);
+                        };
+                    })(photoImageTag);
 
-                marker.infoBox = (function(samePhotoImageTag) {
-                    return function() {
-                        model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span><br />' + samePhotoImageTag);
+                } else {
+                    marker.infoBox = function() {
+                        model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span>');
                         model.infoBox.open(model.drawnMap(), this);
                     };
-                })(photoImageTag);
-
-            } else {
+                }
+            })
+            .fail(function() {
                 marker.infoBox = function() {
                     model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span>');
                     model.infoBox.open(model.drawnMap(), this);
                 };
-            }
-        })
-        .fail(function() {
-            marker.infoBox = function() {
-                model.infoBox.setContent(name + '<br /><span class="info-box-address">' + address + '</span>');
-                model.infoBox.open(model.drawnMap(), this);
-            };
-        });
+            });
     },
 
     // a function to filter out common/insignificant words within a string;
@@ -294,8 +282,6 @@ var mapViewModel = {
 
     updateLatLng: function() {
         var city = document.getElementById('city-input').value;
-        // console.log(city);
-
         var cityToArray = city.split(' ');
         var cityToString = cityToArray.join('+');
 
@@ -307,10 +293,7 @@ var mapViewModel = {
             // if a city is not found to match, then attempt to draw the user's current position using the browser's geolocation feature;
 
             if (data.status != 'ZERO_RESULTS' && city != '') {
-                // console.log(data);
-        
                 helperFunctions.clearMarkers();
-
                 model.lat(data.results[0].geometry.location.lat);
                 model.lng(data.results[0].geometry.location.lng);
             } else {
@@ -326,7 +309,7 @@ var mapViewModel = {
                     navigator.geolocation.getCurrentPosition(success);
                 } else {
                     alert('There was an error in determining your location. Please (1)enable geolocation AND/OR (2)enter a valid city and state.');
-                }               
+                }
             }
         }).fail(function() {
             alert('There was an error in determining your location. Please check your internet connection.');
@@ -344,20 +327,18 @@ var mapViewModel = {
             panControl: false,
             mapTypeControl: false,
             streetViewControl: false,
-            styles: [
-              {
+            styles: [{
                 "stylers": [
-                  { "lightness": -8 },
-                  { "hue": "#7BFF00" }
+                    { "lightness": -8 },
+                    { "hue": "#7BFF00" }
                 ]
-              },{
+            }, {
                 "featureType": "road",
                 "stylers": [
-                  { "hue": "#FFC915" },
-                  { "saturation": -42 }
+                    { "hue": "#FFC915" },
+                    { "saturation": -42 }
                 ]
-              }
-            ]
+            }]
         });
     }),
 
@@ -372,10 +353,9 @@ var mapViewModel = {
                 border: '1px solid',
                 width: '341px',
                 padding: '10px'
-
             }
         });
-    }), 
+    }),
     makeMapObj: ko.computed(function() {
         model.drawnMap(new google.maps.Map(document.getElementById('map-canvas'), model.mapOptions()));
 
@@ -462,7 +442,7 @@ var mapViewModel = {
         var museumCheckboxInput = document.getElementById('museum');
 
         var artGalleriesListUL = document.getElementById('art-galleries');
-        var museumsListUL = document.getElementById('museums'); 
+        var museumsListUL = document.getElementById('museums');
 
         var textArrayLength = textArray.length;
 
@@ -474,16 +454,14 @@ var mapViewModel = {
 
             artCheckboxInput.disabled = false;
             museumCheckboxInput.disabled = false;
-            
+
             document.getElementById('filtered-businesses').innerHTML = '';
-            // console.log(model.filteredArray());
-            // console.log(model.searchTermsArray());
 
             if (model.artCheckbox()) {
                 artGalleriesListUL.style.display = 'block';
                 model.artMarkersArray().forEach(function(markerItem) {
                     markerItem.setMap(model.drawnMap());
-                });                
+                });
             }
             if (model.museumCheckbox()) {
                 museumsListUL.style.display = 'block';
@@ -491,9 +469,6 @@ var mapViewModel = {
                     markerItem.setMap(model.drawnMap());
                 });
             }
-
-
-
 
             return false;
         } else {
@@ -543,7 +518,7 @@ var mapViewModel = {
                     marker.setMap(model.drawnMap());
                     return true;
                 }
-            }           
+            }
         }
 
         if (model.artCheckbox() && !model.museumCheckbox()) {
@@ -573,8 +548,6 @@ var mapViewModel = {
             var arr = model.artMarkersArray;
             var i = index;
 
-            // console.log(arr);
-
             (function(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI) {
                 return helperFunctions.addFlickrImages(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI);
             })(marker, name, address, lat, lng, arr, i);
@@ -587,8 +560,6 @@ var mapViewModel = {
             var lng = marker.position.lng();
             var arr = model.museumMarkersArray;
             var i = index;
-
-            // console.log(arr);
 
             (function(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI) {
                 return helperFunctions.addFlickrImages(sameMarker, sameName, sameAddress, sameLat, sameLng, sameArr, sameI);
