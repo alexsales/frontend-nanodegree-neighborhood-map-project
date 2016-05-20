@@ -23,9 +23,6 @@
     "test",
     "tests"
   ],
-  "ignoredDependencies": [
-    "jquery"
-  ],
   "dependencies": {
     "knockoutjs": "~3.3.0",
     "bootstrap": "~3.0.0",    
