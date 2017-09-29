@@ -24,8 +24,7 @@ var helperFunctions = {
 
     // fill model.artMarkersArray;
     // create new Marker object containing map, position, address, title, placeId, label properties using data passed into the function;
-    // instead of using Google's built-in object Marker constructor and new maps.google.Marker, use Map Icons' Marker library and new Marker();
-    // Map Icons (map-icons.com) extends the Google Maps Marker object for better marker control and customization
+    // use fontAwesome and the fontawesome-markers module to create custom marker icons
     // instead of using Google's built-in object InfoWindow constructor and new maps.google.InfoWindow, use Google's InfoBox library and new InfoBox();
     // InfoBox (http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/1.1.9/docs/reference.html) extends the Google InfoWindow object for better infowindow control and customization;
 
