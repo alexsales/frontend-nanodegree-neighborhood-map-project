@@ -31,5 +31,6 @@
   "bugs": {
     "url": "https://github.com/alexsales/frontend-nanodegree-neighborhood-map-project"
   },
-  "homepage": "https://github.com/alexsales/frontend-nanodegree-neighborhood-map-project"
+  "homepage": "https://github.com/alexsales/frontend-nanodegree-neighborhood-map-project",
+  "dependencies": {}
 }

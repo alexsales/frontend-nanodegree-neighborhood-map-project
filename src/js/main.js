@@ -50,14 +50,16 @@ var helperFunctions = {
                     placeId: placeId,
                     zIndex: 9,
                     icon: {
-                        path: MAP_PIN,
-                        fillColor: '#0E77E9',
-                        fillOpacity: 1,
-                        strokeColor: '',
+                        path: fontawesome.markers.PICTURE_O,
+                        scale: 0.35,
                         strokeWeight: 0,
-                        scale: 0.26
+                        strokeColor: '#666',
+                        strokeOpacity: 0,
+                        fillColor: '#F256FB',
+                        fillOpacity: 1,
+                        labelOrigin: new google.maps.Point(18,10)
                     },
-                    label: '<i class="map-icon-art-gallery art-gallery"></i>',
+                    label: '',
                     infoBox: function() {
                         model.infoBox.setContent(this.title + '<br /><span class="info-box-address">' + this.address + '</span>');
                         model.infoBox.open(model.drawnMap(), this);
@@ -91,14 +93,16 @@ var helperFunctions = {
                     placeId: placeId,
                     zIndex: 9,
                     icon: {
-                        path: MAP_PIN,
-                        fillColor: '#0E77E9',
-                        fillOpacity: 1,
-                        strokeColor: '',
+                        path: fontawesome.markers.UNIVERSITY,
+                        scale: 0.35,
                         strokeWeight: 0,
-                        scale: 0.26
+                        strokeColor: '#666',
+                        strokeOpacity: 0,
+                        fillColor: '#3DC6F3',
+                        fillOpacity: 1,
+                        labelOrigin: new google.maps.Point(18,10)
                     },
-                    label: '<i class="map-icon-museum museum"></i>',
+                    label: '',
                     infoBox: function() {
                         model.infoBox.setContent(this.title + '<br /><span class="info-box-address">' + this.address + '</span>');
                         model.infoBox.open(model.drawnMap(), this);
@@ -353,7 +357,9 @@ var mapViewModel = {
                 border: '1px solid',
                 width: '341px',
                 padding: '10px'
-            }
+            },
+            closeBoxURL: 'http://www.google.com/intl/en_us/mapfiles/close.gif',
+            closeBoxMargin: '5px'
         });
     }),
     makeMapObj: ko.computed(function() {
@@ -366,7 +372,7 @@ var mapViewModel = {
     }),
 
     // create new Marker to show user's current position, the center of the current city, or the center of the current zip code;
-    // the icon and label properties uses the Map Icons library to render the userMarker
+    // the icon and label properties uses the FontAwesome icon library to render the userMarker
 
     makeUserMarker: ko.computed(function() {
         model.userMarker(new Marker({
@@ -375,14 +381,16 @@ var mapViewModel = {
             title: 'You are here!',
             zIndex: 9,
             icon: {
-                path: SQUARE_PIN,
-                fillColor: '#0E77E9',
+                path: fontawesome.markers.MAP_MARKER,
+                scale: 0.60,
+                strokeWeight: 0.5,
+                strokeColor: '#7E5235',
+                strokeOpacity: 0.75,
+                fillColor: '#7E5235',
                 fillOpacity: 1,
-                strokeColor: '',
-                strokeWeight: 0,
-                scale: 0.36
+                labelOrigin: new google.maps.Point(18,10)
             },
-            label: '<i class="map-icon-walking"></i><div id="walking">You are here!</div>'
+            label: 'You are here!'
         }));
     }),
 

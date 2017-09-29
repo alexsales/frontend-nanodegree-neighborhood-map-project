@@ -175,11 +175,19 @@ label {
 	.gm-style img {
 		margin-top: 1px;
 	  	border-top: 1px solid;
-	  	padding-top: 7px;
+	  	padding-top: 4px;
 	}
 
 	.gm-style img:nth-child(1) {
 		border-top: none;
+		/*content: '\0078';
+		width: 20px;*/
+		top: -7px;
+	}
+
+	.gm-style img:nth-child(1):before {
+		content: '\0078';
+		top: -7px;
 	}
 
 	#art-galleries li {
@@ -265,11 +273,19 @@ label {
 	.gm-style img {
 		margin-top: 1px;
 	  	border-top: 1px solid;
-	  	padding-top: 7px;
+	  	padding-top: 4px;
 	}
 
 	.gm-style img:nth-child(1) {
 		border-top: none;
+		/*content: '\0078';
+		width: 20px;*/
+		top: -7px;
+	}
+
+	.gm-style img:nth-child(1):before {
+		content: '\0078';
+		top: -7px;
 	}
 
 	#art-galleries li {
@@ -355,11 +371,19 @@ label {
 	.gm-style img {
 		margin-top: 1px;
 	  	border-top: 1px solid;
-	  	padding-top: 7px;
+	  	padding-top: 4px;
 	}
 
 	.gm-style img:nth-child(1) {
 		border-top: none;
+		/*content: '\0078';
+		width: 20px;*/
+		top: -7px;
+	}
+
+	.gm-style img:nth-child(1):before {
+		content: '\0078';
+		top: -7px;
 	}
 
 	#art-galleries li {
@@ -464,11 +488,19 @@ label {
 	.gm-style img {
 		margin-top: 1px;
 	  	border-top: 1px solid;
-	  	padding-top: 7px;
+	  	padding-top: 4px;
 	}
 
 	.gm-style img:nth-child(1) {
 		border-top: none;
+		/*content: '\0078';
+		width: 20px;*/
+		top: -7px;
+	}
+
+	.gm-style img:nth-child(1):before {
+		content: '\0078';
+		top: -7px;
 	}
 
 	#city-input-form > input {

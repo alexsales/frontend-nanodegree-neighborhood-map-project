@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             my_target: {
                 files: {
                     'src/js/g_bower.min.js': ['src/js/g_bower.js'],
-                    'src/js/g_infobox-icons-main.min.js': ['src/js/infobox.js', 'src/js/map-icons-ie7.js', 'src/js/map-icons.js', 'src/js/main.js']
+                    'src/js/g_infobox-icons.min.js': ['src/js/infobox.js', 'src/js/map-icons.min.js']
                 }
             }
         },
@@ -36,14 +36,13 @@ module.exports = function(grunt) {
                 },
                 files: {
                     'src/css/g_bower.min.css': ['src/css/g_bower.css'],
-                    'src/css/g_offline-styles.min.css': ['src/css/offline-theme-dark.css', 'src/css/offline-theme-dark-indicator.css', 'src/css/offline-language-english.css', 'src/css/offline-language-english-indicator.css', 'src/css/map-icons.css']
+                    'src/css/g_offline-styles.min.css': ['src/css/offline-theme-dark.css', 'src/css/offline-theme-dark-indicator.css', 'src/css/offline-language-english.css', 'src/css/offline-language-english-indicator.css', 'src/css/map-icons.min.css']
                 }
             }
         },
         watch: {
-            all: {
-                files: ['./*.html', './src/**/*.css', './src/**/*.js'],
-            }
+            files: ['./*.html', './src/**/*.css', './src/**/*.js'],
+            // tasks: ['wiredep', 'bower_concat', 'uglify', 'cssmin']
         }
     });
 
