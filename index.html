@@ -5,14 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map Project: Art Galleries and Museums</title>
-    <!-- Bower components below were minified into g_bower.css (use g_bower.min.css in production) -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+
+    <!-- Enable during development / Disable in production -->
+    <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
-    <!-- endbower -->
-    <!-- <link rel="stylesheet" href="src/css/g_bower.min.css" /> -->
-    <link rel="stylesheet" href="src/css/g_offline-styles.min.css" />
-    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="src/css/offline-theme-dark.css" />
+    <link rel="stylesheet" href="src/css/offline-theme-dark-indicator.css" />
+    <link rel="stylesheet" href="src/css/offline-language-english.css" />
+    <link rel="stylesheet" href="src/css/offline-language-english-indicator.css" />
+    <link rel="stylesheet" href="src/css/style.css"> -->
+
+    <!-- Disable during development / Enable in production -->
+    <link rel="stylesheet" href="src/css/style.min.css" />
+
     <script src="src/js/jquery.min.js"></script>
     <script src="src/js/offline.min.js"></script>
 </head>
@@ -51,17 +56,20 @@
             </li>
         </ul>
     </div>
-    <!-- Bower components below were minified into g_bower.js (use g_bower.min.js in production) -->
-    <!-- bower:js -->
-    <script src="bower_components/knockoutjs/dist/knockout.js"></script>
+
+    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCi1LHxB1SvwL3p_Ziyxa8A0_WgrcrTn08&v=3.exp&libraries=places"></script>
+
+    <!-- Enable during development / Disable in production -->
+    <!-- <script src="bower_components/knockoutjs/dist/knockout.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <!-- endbower -->
-    <!-- <script src="src/js/g_bower.min.js"></script> -->
-    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
-    <!-- <script src="src/js/g_infobox-icons-main.min.js"></script> -->
-    <script src="src/js/g_infobox-icons.min.js"></script>
+    <script src="src/js/infobox.js"></script>
+    <script src="src/js/map-icons.min.js"></script>
     <script src="src/js/fontawesome-markers.min.js"></script>
-    <script src="src/js/main.js"></script>
+    <script src="src/js/main.js"></script> -->
+
+    <!-- Disable during development / Enable in production -->
+    <script src="src/js/main.min.js"></script>
+
 </body>
 
 </html>

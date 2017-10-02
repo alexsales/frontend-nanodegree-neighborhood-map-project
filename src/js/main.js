@@ -357,7 +357,7 @@ var mapViewModel = {
                 width: '341px',
                 padding: '10px'
             },
-            closeBoxURL: 'http://www.google.com/intl/en_us/mapfiles/close.gif',
+            closeBoxURL: 'https://www.google.com/intl/en_us/mapfiles/close.gif',
             closeBoxMargin: '5px'
         });
     }),
